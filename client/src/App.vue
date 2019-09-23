@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <b-button loading>Click Me</b-button>
     <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
