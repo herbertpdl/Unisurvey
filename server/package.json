@@ -1,10 +1,10 @@
 {
-  "name": "leads2b",
+  "name": "server",
   "version": "1.0.0",
-  "description": "este leads2b",
   "main": "index.js",
   "scripts": {
-    "start": "npx sequelize db:migrate ; nodemon src/index.js"
+    "migrations": "npx sequelize db:migrate",
+    "start": "nodemon src/index.js"
   },
   "author": "",
   "license": "ISC",
