@@ -4,16 +4,16 @@
       <div class="columns">
         <div class="column is-12">
           <h1 class="title">Cadastro de Curso</h1>
-          <b-message 
+          <b-message
             v-if="!hasMatters"
             :closable="false"
-            title="Você não tem nenhum professor cadastrado" 
-            type="is-warning" 
+            title="Você não tem nenhum professor cadastrado"
+            type="is-warning"
             aria-close-label="Close message"
           >
             <p class="margin-bottom-1">Antes de cadastrar um curso, você precisa ter uma ou mais disciplinas cadastradas.</p>
             <p class="margin-bottom-2">Deseja cadastrar uma disciplina?</p>
-              <b-button 
+              <b-button
                 tag="router-link"
                 to="/register-matter"
                 type="is-primary">
@@ -24,7 +24,7 @@
             <div class="columns">
               <div class="column is-6">
                 <b-field label="Nome do Curso">
-                    <b-input v-model="name" placeholder="Ex: Matemática" />
+                    <b-input v-model="name" placeholder="Ex: Ciênca da Computação" />
                 </b-field>
               </div>
             </div>
@@ -49,27 +49,37 @@
             <div class="columns">
               <div class=" column is-6">
                 <b-field label="Disciplinas">
-                  <multiselect 
+                  <multiselect
                     v-model="selectedMatters"
                     :options="matters"
                     :multiple="true"
                     :close-on-select="false"
+                    :max="5"
                     searchable
                     track-by="name"
                     label="name"
                     placeholder="Selecione as disciplinas"
-                  />
+                    selectLabel="Selecionar"
+                    selectedLabel="Selecionado"
+                    deselectLabel="Remover"
+                  >
+                    <template slot="maxElements">
+                      Você pode selecionas no máximo 5 disciplinas.
+                    </template>
+                  </multiselect>
                 </b-field>
               </div>
             </div>
-            <div class="buttons">
-              <b-button type="is-danger">
-                Cancelar
-              </b-button>
-              <b-button type="is-primary">
-                Enviar
-              </b-button>
-            </div>            
+            <div class="align-buttons--right">
+              <div class="buttons">
+                <b-button type="is-danger">
+                  Cancelar
+                </b-button>
+                <b-button type="is-primary" @click="saveCourse">
+                  Enviar
+                </b-button>
+              </div>
+            </div>
           </card>
         </div>
       </div>
@@ -115,6 +125,11 @@ export default {
           this.hasMatters = false;
         }
       })
+  },
+  methods: {
+    saveCourse() {
+      this.$store.commit('loading', true);
+    }
   }
 }
 </script>

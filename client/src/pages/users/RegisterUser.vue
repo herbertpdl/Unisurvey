@@ -43,7 +43,7 @@
                 <div class="column is-6">
                   <b-field label="Curso">
                     <b-select v-model="course" placeholder="Selecione" expanded>
-                        <option 
+                        <option
                           v-for="(course, index) in courses"
                           v-bind:key="index"
                           v-bind:value="course.name"
@@ -55,14 +55,16 @@
                 </div>
               </div>
             </transition>
-            <div class="buttons">
-              <b-button type="is-danger">
-                Cancelar
-              </b-button>
-              <b-button type="is-primary">
-                Enviar
-              </b-button>
-            </div>            
+            <div class="align-buttons--right">
+              <div class="buttons">
+                <b-button type="is-danger">
+                  Cancelar
+                </b-button>
+                <b-button type="is-primary">
+                  Enviar
+                </b-button>
+              </div>
+            </div>
           </card>
         </div>
       </div>
@@ -93,7 +95,7 @@ export default {
   mounted() {
     getCourses()
       .then((response) => {
-        this.courses = response.data
+        this.courses = response
       })
   }
 }

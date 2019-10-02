@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <b-loading :is-full-page="true" :active.sync="loading" />
     <menu-header />
     <router-view />
   </div>
@@ -15,6 +16,11 @@ export default {
     MenuHeader,
     Card,
   },
+  computed: {
+    loading() {
+      return this.$store.state.loading;
+    },
+  }
 };
 </script>
 

@@ -4,16 +4,16 @@
       <div class="columns">
         <div class="column is-12">
           <h1 class="title">Cadastro de Disciplina</h1>
-          <b-message 
+          <b-message
             v-if="!hasTeachers"
             :closable="false"
-            title="Você não tem nenhum professor cadastrado" 
-            type="is-warning" 
+            title="Você não tem nenhum professor cadastrado"
+            type="is-warning"
             aria-close-label="Close message"
           >
             <p class="margin-bottom-1">Antes de cadastrar uma disciplina, você precisa ter um professor cadastrado.</p>
             <p class="margin-bottom-2">Deseja cadastrar um professor?</p>
-              <b-button 
+              <b-button
                 tag="router-link"
                 to="/register-user"
                 type="is-primary">
@@ -32,7 +32,7 @@
               <div class="column is-6">
                 <b-field label="Professor responsável">
                   <b-select v-model="teacher" placeholder="Selecione" expanded>
-                      <option 
+                      <option
                         v-for="(teacher, index) in teachers"
                         v-bind:key="index"
                         v-bind:value="teacher.name"
@@ -43,14 +43,16 @@
                 </b-field>
               </div>
             </div>
-            <div class="buttons">
-              <b-button type="is-danger">
-                Cancelar
-              </b-button>
-              <b-button type="is-primary">
-                Enviar
-              </b-button>
-            </div>            
+            <div class="align-buttons--right">
+              <div class="buttons">
+                <b-button type="is-danger">
+                  Cancelar
+                </b-button>
+                <b-button type="is-primary">
+                  Enviar
+                </b-button>
+              </div>
+            </div>
           </card>
         </div>
       </div>
@@ -79,8 +81,8 @@ export default {
   mounted() {
     getTeachers()
       .then((response) => {
-        this.teachers = response.data
-        if(response.data.length > 0) {
+        this.teachers = response
+        if(response.length > 0) {
           this.hasTeachers = true;
         } else {
           this.hasTeachers = false;

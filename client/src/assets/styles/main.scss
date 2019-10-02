@@ -18,5 +18,16 @@
         }
       }
     }
+
+    &__placeholder {
+      font-size: 16px;
+    }
+  }
+}
+
+.align-buttons {
+  &--right {
+    display: flex;
+    justify-content: flex-end;
   }
 }
