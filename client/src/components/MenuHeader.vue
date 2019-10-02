@@ -1,29 +1,56 @@
 <template>
-  <div class="columns">
-    <div class=" column is-12">
-      <div class="header--cowrapper">
-        <b-navbar type="is-primary">
-          <template slot="start">
-            <b-navbar-item href="#">Home</b-navbar-item>
-            <b-navbar-item href="#">Usuários</b-navbar-item>
-            <b-navbar-item href="#">Questionários</b-navbar-item>
-            <b-navbar-item href="#">Perguntas</b-navbar-item>
-            <b-navbar-item href="#">Cursos</b-navbar-item>
-            <b-navbar-item href="#">Disciplinas</b-navbar-item>
-            <b-navbar-item href="#">Relatório</b-navbar-item>
-          </template>
+  <section>
+    <div class="columns">
+      <div class=" column is-12">
+        <div class="header--cowrapper">
+          <b-navbar type="is-primary">
+            <template slot="start">
+              <b-navbar-item tag="router-link" to="/">Home</b-navbar-item>
+              <!-- Users -->
+              <b-navbar-dropdown label="Usuários">
+                <b-navbar-item tag="router-link" to="/register-user">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+              </b-navbar-dropdown>
 
-          <template slot="end">
-            <b-navbar-item tag="div">
-              <b-button type="is-primary">
-                Sair
-              </b-button>
-            </b-navbar-item>
-          </template>
-        </b-navbar>
+              <!-- Surveys -->
+              <b-navbar-dropdown label="Questionários">
+                <b-navbar-item tag="router-link" to="">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+              </b-navbar-dropdown>
+
+              <!-- Questions -->
+              <b-navbar-dropdown label="Perguntas">
+                <b-navbar-item tag="router-link" to="">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+              </b-navbar-dropdown>
+
+              <!-- Courses -->
+              <b-navbar-dropdown label="Cursos">
+                <b-navbar-item tag="router-link" to="/register-course">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+              </b-navbar-dropdown>
+
+              <!-- Matters -->
+              <b-navbar-dropdown label="Disciplinas">
+                <b-navbar-item tag="router-link" to="/register-matter">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+              </b-navbar-dropdown>
+
+              <b-navbar-item tag="router-link" to="">Relatório</b-navbar-item>
+            </template>
+
+            <template slot="end">
+              <b-navbar-item tag="div">
+                <b-button type="is-primary">
+                  Sair
+                </b-button>
+              </b-navbar-item>
+            </template>
+          </b-navbar>
+        </div>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -33,5 +60,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>
