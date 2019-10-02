@@ -23,14 +23,14 @@
           <card v-else>
             <div class="columns">
               <div class="column is-6">
-                <b-field label="Nome">
+                <b-field label="Nome da disciplina">
                     <b-input v-model="name" placeholder="Ex: Matemática" />
                 </b-field>
               </div>
             </div>
             <div class="columns">
               <div class="column is-6">
-                <b-field label="Curso">
+                <b-field label="Professor responsável">
                   <b-select v-model="teacher" placeholder="Selecione" expanded>
                       <option 
                         v-for="(teacher, index) in teachers"
