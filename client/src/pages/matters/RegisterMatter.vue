@@ -48,7 +48,7 @@
                 <b-button type="is-danger">
                   Cancelar
                 </b-button>
-                <b-button type="is-primary">
+                <b-button type="is-primary" @click="saveMatter">
                   Enviar
                 </b-button>
               </div>
@@ -88,6 +88,11 @@ export default {
           this.hasTeachers = false;
         }
       })
+  },
+  methods: {
+    saveMatter() {
+      this.$store.commit('loading', true);
+    }
   }
 }
 </script>

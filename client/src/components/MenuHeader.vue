@@ -1,5 +1,5 @@
 <template>
-  <section style="overflow: hidden">
+  <section>
     <div class="columns">
       <div class=" column is-12">
         <div class="header--cowrapper">
@@ -60,5 +60,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

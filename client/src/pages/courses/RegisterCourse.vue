@@ -118,8 +118,8 @@ export default {
   mounted() {
     getMatters()
       .then((response) => {
-        this.matters = response.data
-        if(response.data.length > 0) {
+        this.matters = response
+        if(response.length > 0) {
           this.hasMatters = true;
         } else {
           this.hasMatters = false;

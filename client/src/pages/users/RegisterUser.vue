@@ -14,6 +14,7 @@
             </div>
             <div class="columns">
               <div class="column is-6">
+                <!-- CPF -->
                 <b-field label="CPF">
                     <b-input v-model="cpf" placeholder="XX.XXX.XXX-X" />
                 </b-field>
@@ -22,6 +23,7 @@
             </div>
             <div class="columns">
               <div class="column is-6">
+                <!-- E-mail -->
                 <b-field label="E-mail">
                     <b-input v-model="email" type="email" placeholder="nome@domínio.com" />
                 </b-field>
@@ -29,18 +31,26 @@
             </div>
             <div class="columns">
               <div class="column is-6">
+                <!-- User type -->
                 <b-field label="Tipo de usuário">
-                  <b-select v-model="usertype" placeholder="Selecione" expanded>
-                      <option value="aluno">Aluno</option>
-                      <option value="professor">Professor</option>
-                      <option value="funcionário">Funcionário</option>
+                  <b-select
+                    expanded
+                    v-model="usertype"
+                    placeholder="Selecione"
+                    @input="loadCourses"
+                  >
+                    <option value="aluno">Aluno</option>
+                    <option value="professor">Professor</option>
+                    <option value="funcionário">Funcionário</option>
                   </b-select>
                 </b-field>
               </div>
             </div>
+            <!-- Show if select a student -->
             <transition name="fade">
-              <div class="columns" v-if="usertype === 'aluno'">
+              <div class="columns" v-if="usertype === 'aluno' && this.courses.length > 0">
                 <div class="column is-6">
+                  <!-- Course -->
                   <b-field label="Curso">
                     <b-select v-model="course" placeholder="Selecione" expanded>
                         <option
@@ -60,7 +70,7 @@
                 <b-button type="is-danger">
                   Cancelar
                 </b-button>
-                <b-button type="is-primary">
+                <b-button type="is-primary" @click="saveUser">
                   Enviar
                 </b-button>
               </div>
@@ -92,11 +102,20 @@ export default {
       courses: [],
     }
   },
-  mounted() {
-    getCourses()
-      .then((response) => {
-        this.courses = response
-      })
+  methods: {
+    loadCourses() {
+      if(this.usertype === 'aluno' && this.courses.length === 0) {
+        this.$store.commit('loading', true);
+        getCourses()
+          .then((response) => {
+            this.courses = response
+            this.$store.commit('loading', false);
+          })
+      }
+    },
+    saveUser() {
+      this.$store.commit('loading', true);
+    }
   }
 }
 </script>
