@@ -9,7 +9,7 @@
               <!-- Users -->
               <b-navbar-dropdown label="Usuários">
                 <b-navbar-item tag="router-link" to="/register-user">Cadastrar</b-navbar-item>
-                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="/user-list">Listar</b-navbar-item>
               </b-navbar-dropdown>
 
               <!-- Surveys -->

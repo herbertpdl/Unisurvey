@@ -70,7 +70,7 @@
                 <b-button type="is-danger">
                   Cancelar
                 </b-button>
-                <b-button type="is-primary" @click="saveUser">
+                <b-button type="is-primary" @click="save">
                   Enviar
                 </b-button>
               </div>
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { getCourses } from '@/services/api'
+import { getCourses, saveUser } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -105,16 +105,26 @@ export default {
   methods: {
     loadCourses() {
       if(this.usertype === 'aluno' && this.courses.length === 0) {
-        this.$store.commit('loading', true);
+        this.$store.commit('loading', true)
         getCourses()
           .then((response) => {
             this.courses = response
-            this.$store.commit('loading', false);
+            this.$store.commit('loading', false)
           })
       }
     },
-    saveUser() {
-      this.$store.commit('loading', true);
+    save() {
+      this.$store.commit('loading', true)
+      saveUser({
+        name: this.name,
+        cpf: this.cnpf,
+        email: this.email,
+        type: this.usertype,
+        course: this.course
+      }).then((resp) => {
+          console.log(resp);
+          this.$store.commit('loading', false)
+        })
     }
   }
 }
