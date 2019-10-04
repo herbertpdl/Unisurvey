@@ -20,7 +20,7 @@
 
               <!-- Questions -->
               <b-navbar-dropdown label="Perguntas">
-                <b-navbar-item tag="router-link" to="">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="/register-question">Cadastrar</b-navbar-item>
                 <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
               </b-navbar-dropdown>
 

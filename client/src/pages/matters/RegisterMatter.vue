@@ -3,6 +3,33 @@
     <div class="container">
       <div class="columns">
         <div class="column is-12">
+          <!-- Success Message -->
+          <b-message 
+            auto-close 
+            has-icon
+            title="Sucesso" 
+            type="is-success"
+            :active.sync="isSuccessActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Disiplina cadastrada com sucesso!
+          </b-message>
+
+          <!-- Error Message -->
+          <b-message 
+            auto-close 
+            has-icon
+            title="Sucesso" 
+            type="is-danger"
+            :active.sync="isErrorActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Houve um erro ao cadastrar a disciplina, verifique os dados digitados e tente novamente.
+          </b-message>
+
+          <!-- Form -->
           <h1 class="title">Cadastro de Disciplina</h1>
           <b-message
             v-if="!hasTeachers"
@@ -48,7 +75,7 @@
                 <b-button type="is-danger">
                   Cancelar
                 </b-button>
-                <b-button type="is-primary" @click="saveMatter">
+                <b-button type="is-primary" @click="save">
                   Enviar
                 </b-button>
               </div>
@@ -61,7 +88,7 @@
 </template>
 
 <script>
-import { getTeachers } from '@/services/api'
+import { getTeachers, saveMatter } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -72,10 +99,12 @@ export default {
   },
   data() {
     return {
-      name: '',
+      name: null,
       teachers: [],
-      teacher: '',
+      teacher: null,
       hasTeachers: true,
+      isSuccessActive: false,
+      isErrorActive: false,
     }
   },
   mounted() {
@@ -90,8 +119,19 @@ export default {
       })
   },
   methods: {
-    saveMatter() {
+    save() {
       this.$store.commit('loading', true);
+      saveMatter({
+        name: this.name,
+        teacher: this.teacher
+      })
+        .then(resp => {
+          this.$store.commit('loading', false)
+          this.isSuccessActive = true
+        })
+        .catch(err => {
+          this.isErrorActive = true
+        })
     }
   }
 }

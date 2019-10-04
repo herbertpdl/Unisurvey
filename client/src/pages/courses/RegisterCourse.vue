@@ -3,6 +3,33 @@
     <div class="container">
       <div class="columns">
         <div class="column is-12">
+          <!-- Success Message -->
+          <b-message 
+            auto-close 
+            has-icon
+            title="Sucesso" 
+            type="is-success"
+            :active.sync="isSuccessActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Curso cadastrado com sucesso!
+          </b-message>
+
+          <!-- Error Message -->
+          <b-message 
+            auto-close 
+            has-icon
+            title="Sucesso" 
+            type="is-danger"
+            :active.sync="isErrorActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Houve um erro ao cadastrar o curso, verifique os dados digitados e tente novamente.
+          </b-message>
+
+          <!-- Form -->
           <h1 class="title">Cadastro de Curso</h1>
           <b-message
             v-if="!hasMatters"
@@ -54,7 +81,7 @@
                     :options="matters"
                     :multiple="true"
                     :close-on-select="false"
-                    :max="5"
+                    :max="6"
                     searchable
                     track-by="name"
                     label="name"
@@ -64,7 +91,7 @@
                     deselectLabel="Remover"
                   >
                     <template slot="maxElements">
-                      Você pode selecionas no máximo 5 disciplinas.
+                      Você pode selecionar no máximo 6 disciplinas.
                     </template>
                   </multiselect>
                 </b-field>
@@ -75,7 +102,7 @@
                 <b-button type="is-danger">
                   Cancelar
                 </b-button>
-                <b-button type="is-primary" @click="saveCourse">
+                <b-button type="is-primary" @click="save">
                   Enviar
                 </b-button>
               </div>
@@ -88,7 +115,7 @@
 </template>
 
 <script>
-import { getMatters } from '@/services/api'
+import { getMatters, saveCourse } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -113,6 +140,8 @@ export default {
         { name: 'Laravel', language: 'PHP' },
         { name: 'Phoenix', language: 'Elixir' }
       ],
+      isSuccessActive: false,
+      isErrorActive: false,
     }
   },
   mounted() {
@@ -127,8 +156,19 @@ export default {
       })
   },
   methods: {
-    saveCourse() {
+    save() {
       this.$store.commit('loading', true);
+      saveCourse({
+        name: this.name,
+        period: this.period,
+        matters: this.selectedMatters,
+      }).then((resp) => {
+          this.$store.commit('loading', false)
+          this.isSuccessActive = true
+        })
+        .catch((err) => {
+          this.isErrorActive = true
+        })
     }
   }
 }

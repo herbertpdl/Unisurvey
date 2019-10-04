@@ -7,6 +7,7 @@ import RegisterUser from '../pages/users/RegisterUser'
 import UsersList from '../pages/users/UsersList'
 import RegisterMatter from '../pages/matters/RegisterMatter'
 import RegisterCourse from '../pages/courses/RegisterCourse'
+import RegisterQuestion from '../pages/questions/RegisterQuestion'
 
 Vue.use(Router)
 
@@ -41,6 +42,11 @@ let router = new Router({
       path: '/register-course',
       name: 'register-course',
       component: RegisterCourse, 
+    },
+    {
+      path: '/register-question',
+      name: 'register-question',
+      component: RegisterQuestion, 
     }
   ]
 })

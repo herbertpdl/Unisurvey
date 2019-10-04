@@ -3,6 +3,33 @@
     <div class="container">
       <div class="columns">
         <div class="column is-12">
+          <!-- Success Message -->
+          <b-message 
+            auto-close 
+            has-icon
+            title="Sucesso" 
+            type="is-success"
+            :active.sync="isSuccessActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Usuário cadastrado com sucesso!
+          </b-message>
+
+          <!-- Error Message -->
+          <b-message 
+            auto-close 
+            has-icon
+            title="Sucesso" 
+            type="is-danger"
+            :active.sync="isErrorActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Houve um erro ao cadastrar o usuário, verifique os dados digitados e tente novamente.
+          </b-message>
+
+          <!-- Form -->
           <h1 class="title">Cadastro de Usuários</h1>
           <card>
             <div class="columns">
@@ -16,7 +43,13 @@
               <div class="column is-6">
                 <!-- CPF -->
                 <b-field label="CPF">
-                    <b-input v-model="cpf" placeholder="XX.XXX.XXX-X" />
+                    
+                    <the-mask 
+                      mask="###.###.###-##"
+                      type="text"
+                      placeholder="XX.XXX.XXX-X"
+                      v-bind:class="'input'"
+                    />
                 </b-field>
                 <small>Será utilizado como senha padrão deste usuário.</small>
               </div>
@@ -85,10 +118,15 @@
 <script>
 import { getCourses, saveUser } from '@/services/api'
 
+import { mask } from 'vue-the-mask'
+
 import Card from  '@/components/Card'
 
 export default {
   name: 'register-user',
+  directives: {
+    mask
+  },
   components: {
     Card,
   },
@@ -100,6 +138,8 @@ export default {
       usertype: '',
       course: '',
       courses: [],
+      isSuccessActive: false,
+      isErrorActive: false,
     }
   },
   methods: {
@@ -121,9 +161,12 @@ export default {
         email: this.email,
         type: this.usertype,
         course: this.course
-      }).then((resp) => {
-          console.log(resp);
+      }).then(resp => {
           this.$store.commit('loading', false)
+          this.isSuccessActive = true
+        })
+        .catch(err => {
+          this.isErrorActive = true
         })
     }
   }
