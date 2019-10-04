@@ -8,14 +8,14 @@
           <card>
             <div class="columns">
               <div class="column is-6">
-                <b-field label="Enunciado">                  
+                <b-field label="Enunciado">
                   <b-input v-model="statement" placeholder="Ex: O professor apresentou o plano de ensino?" />
                 </b-field>
               </div>
             </div>
             <div class="columns">
               <div class="column is-6">
-                <b-field label="Tipo">                  
+                <b-field label="Tipo">
                   <b-select
                     expanded
                     v-model="type"
@@ -33,7 +33,7 @@
               <div class="column is-6">
                 <p class="margin-bottom-1">Deseja permitir que o usuário selecione mais de uma opção?</p>
                 <div class="field">
-                    <b-switch 
+                    <b-switch
                       v-model="checkMultiple"
                       true-value="Sim"
                       false-value="Não"
@@ -48,34 +48,42 @@
             <label class="label">Alternativas</label>
             <div class="columns">
               <div class="column is-6">
-                <b-input v-model="description" />
+                <b-input
+                  v-model="description"
+                  ref="alternative"
+                  @keyup.native.enter="addAlternative"
+                />
               </div>
               <div class="column is-1">
-                <b-button 
+                <b-button
                   v-if="alternatives.length < 20"
-                  type="is-success" 
+                  type="is-success"
                   icon-right="plus"
-                  v-on:click="addAlternative"
+                  @click="addAlternative"
                 />
               </div>
             </div>
 
-            <!--  -->
-            <div 
-              v-for="(alternative, index) in alternatives" 
-              :key="index"
-              class="columns"
-            >
-              <div class="column is-5">
-                <p>{{ index+1 }}) {{ alternative }}</p>              
-              </div>
-              <div class="column is-1">
-                <b-button
-                  size="is-small"
-                  type="is-danger" 
-                  icon-right="delete"
-                  v-on:click="deleteAlternative(index)"
-                />
+            <!-- Alternatives -->
+            <div class="columns">
+              <div class="column is-6">
+                <div class="b-table">
+                  <table class="table is-striped">
+                    <tr v-for="(alternative, index) in alternatives" :key="index">
+                      <td width="100%">
+                        <p>{{ index+1 }}) {{ alternative }}</p>
+                      </td>
+                      <td>
+                        <b-button
+                          size="is-small"
+                          type="is-danger"
+                          icon-right="delete"
+                          @click="deleteAlternative(index)"
+                        />
+                      </td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
 
@@ -110,11 +118,14 @@ export default {
   },
   methods: {
     addAlternative() {
-      if (this.description !== null) {
+      if (this.description !== null && this.alternatives.length < 5) {
         this.alternatives.push(this.description)
         this.description = null
-      } else {
+        this.$refs.alternative.focus()
+      } else if (this.description === null) {
         this.empty()
+      } else {
+        this.maximum()
       }
     },
     deleteAlternative(index) {
@@ -126,6 +137,14 @@ export default {
         message: `Você não pode adicionar uma alternativa vazia`,
         position: 'is-bottom',
         type: 'is-danger'
+      })
+    },
+    maximum() {
+      this.$buefy.toast.open({
+        duration: 3000,
+        message: `Você pode adicionar no máximo 5 alternativas`,
+        position: 'is-bottom',
+        type: 'is-warning'
       })
     }
   }
