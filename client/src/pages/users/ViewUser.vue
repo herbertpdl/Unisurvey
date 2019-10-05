@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <div class="container">
-      <div class="columns">
+      <div v-if="userdata" class="columns">
         <div class="column is-12">
           <!-- Success Message -->
           <b-message 
@@ -13,7 +13,7 @@
             :duration="5000"
             aria-close-label="Fechar mensagem"
           >
-            Usuário cadastrado com sucesso!
+            Usuário alterado com sucesso!
           </b-message>
 
           <!-- Error Message -->
@@ -26,66 +26,64 @@
             :duration="5000"
             aria-close-label="Fechar mensagem"
           >
-            Houve um erro ao tentar cadastrar o usuário, verifique os dados digitados e tente novamente.
+            Houve um erro ao tentar salvar o usuário, verifique os dados digitados e tente novamente.
           </b-message>
 
-          <!-- Form -->
-          <h1 class="title">Cadastro de Usuários</h1>
+          <h1 class="title">{{ userdata.name }}</h1>
           <card>
             <div class="columns">
               <div class="column is-6">
                 <b-field label="Nome">
-                    <b-input v-model="name" placeholder="Ex: João da Silva" />
+                  <b-input :disabled="!edit" v-model="userdata.name" />
                 </b-field>
               </div>
             </div>
             <div class="columns">
               <div class="column is-6">
-                <!-- CPF -->
                 <b-field label="CPF">
-                    
-                    <the-mask 
-                      mask="###.###.###-##"
-                      type="text"
-                      placeholder="XX.XXX.XXX-X"
-                      v-bind:class="'input'"
-                    />
+                  <b-input :disabled="!edit" v-model="userdata.cpf" />
                 </b-field>
-                <small>Será utilizado como senha padrão deste usuário.</small>
               </div>
             </div>
             <div class="columns">
               <div class="column is-6">
-                <!-- E-mail -->
                 <b-field label="E-mail">
-                    <b-input v-model="email" type="email" placeholder="nome@domínio.com" />
+                  <b-input :disabled="!edit" v-model="userdata.email" />
                 </b-field>
               </div>
             </div>
             <div class="columns">
               <div class="column is-6">
-                <!-- User type -->
                 <b-field label="Tipo de usuário">
+                  <b-input v-if="!edit" disabled v-model="userdata.type" />
                   <b-select
+                    v-else
                     expanded
-                    v-model="usertype"
+                    v-model="userdata.type"
                     placeholder="Selecione"
-                    @input="loadCourses"
                   >
                     <option value="aluno">Aluno</option>
-                    <option value="professor">Professor</option>
+                    <option selected value="professor">Professor</option>
                     <option value="funcionário">Funcionário</option>
                   </b-select>
                 </b-field>
+                </b-field>
               </div>
             </div>
-            <!-- Show if select a student -->
-            <transition name="fade">
-              <div class="columns" v-if="usertype === 'aluno' && this.courses.length > 0">
-                <div class="column is-6">
-                  <!-- Course -->
-                  <b-field label="Curso">
-                    <b-select v-model="course" placeholder="Selecione" expanded>
+            <div v-if="userdata.type === 'aluno'" class="columns">
+              <div class="column is-6">
+                <b-field label="Curso">
+                  <b-input 
+                    v-if="!edit" 
+                    disabled 
+                    v-model="userdata.course" 
+                  />
+                  <b-select 
+                    v-else
+                    v-model="userdata.course" 
+                    placeholder="Selecione" 
+                    expanded
+                  >
                       <option
                         v-for="(course, index) in courses"
                         v-bind:key="index"
@@ -94,16 +92,19 @@
                         {{ course.name }}
                       </option>
                     </b-select>
-                  </b-field>
-                </div>
+                </b-field>
               </div>
-            </transition>
+            </div>
+
             <div class="align-buttons--right">
               <div class="buttons">
-                <b-button type="is-danger">
-                  Cancelar
+                <b-button
+                  v-bind:type="edit ? 'is-secondary' : 'is-primary'"
+                  @click="enableEdit"
+                >
+                  Editar
                 </b-button>
-                <b-button type="is-primary" @click="save">
+                <b-button v-if="edit" type="is-primary" @click="save">
                   Enviar
                 </b-button>
               </div>
@@ -116,51 +117,50 @@
 </template>
 
 <script>
-import { getCourses, saveUser } from '@/services/api'
-
-import { mask } from 'vue-the-mask'
+import { getUser, getCourses, saveUser } from '@/services/api'
 
 import Card from  '@/components/Card'
 
 export default {
-  name: 'register-user',
-  directives: {
-    mask
-  },
+  name: 'view-user',
   components: {
-    Card,
+    Card
   },
   data() {
     return {
-      name: '',
-      cpf: '',
-      email: '',
-      usertype: '',
-      course: '',
-      courses: [],
+      userdata: null,
+      edit: false,
+      courses: null,
       isSuccessActive: false,
       isErrorActive: false,
     }
   },
+  mounted() {
+    this.$store.commit('loading', true)
+    getUser(this.$route.params.id)
+      .then(resp => {
+        this.userdata = resp
+        this.$store.commit('loading', false)  
+      })
+  },
   methods: {
-    loadCourses() {
-      if(this.usertype === 'aluno' && this.courses.length === 0) {
-        this.$store.commit('loading', true)
-        getCourses()
-          .then((response) => {
-            this.courses = response
-            this.$store.commit('loading', false)
-          })
-      }
+    enableEdit() {
+      this.$store.commit('loading', true)
+      getCourses()
+        .then(resp => {
+          this.courses = resp
+          this.edit = true
+          this.$store.commit('loading', false)
+        })
     },
     save() {
       this.$store.commit('loading', true)
       saveUser({
-        name: this.name,
-        cpf: this.cnpf,
-        email: this.email,
-        type: this.usertype,
-        course: this.course
+        name: this.userdata.name,
+        cpf: this.userdata.cnpf,
+        email: this.userdata.email,
+        type: this.userdata.usertype,
+        course: this.userdata.course
       }).then(resp => {
           this.$store.commit('loading', false)
           this.isSuccessActive = true
@@ -173,6 +173,6 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 </style>

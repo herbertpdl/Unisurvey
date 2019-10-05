@@ -171,7 +171,7 @@ export default {
       this.alternatives.splice(index, 1)
     },
     save() {
-       this.$store.commit('loading', true);
+      this.$store.commit('loading', true)
       saveQuestion({
         statement: this.statement,
         type: this.type,
@@ -183,6 +183,7 @@ export default {
           this.isSuccessActive = true
         })
         .catch(err => {
+          this.$store.commit('loading', false)
           this.isErrorActive = true
         })
     },

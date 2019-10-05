@@ -5,6 +5,7 @@ import Login from '../pages/Login'
 import Home from '../pages/home/Home'
 import RegisterUser from '../pages/users/RegisterUser'
 import UsersList from '../pages/users/UsersList'
+import ViewUser from '../pages/users/ViewUser'
 import RegisterMatter from '../pages/matters/RegisterMatter'
 import RegisterCourse from '../pages/courses/RegisterCourse'
 import RegisterQuestion from '../pages/questions/RegisterQuestion'
@@ -27,6 +28,11 @@ let router = new Router({
       path: '/register-user',
       name: 'register-user',
       component: RegisterUser, 
+    },
+    {
+      path: '/user/:id',
+      name: 'view-user',
+      component: ViewUser,
     },
     {
       path: '/user-list',

@@ -17,12 +17,45 @@
           </div>
           <b-table
             :data="userList"
-            :columns="columns"
             :per-page="perPage"
             paginated
             striped
             hoverable
           >
+          <template slot-scope="props">
+                <b-table-column label="Nome">
+                    {{ props.row.name }}
+                </b-table-column>
+
+                <b-table-column label="E-mail">
+                    {{ props.row.email }}
+                </b-table-column>
+
+                <b-table-column label="Tipo">
+                    {{ props.row.type }}
+                </b-table-column>
+
+                <b-table-column label="Visualizar" centered width="65">
+                    <b-button
+                      type="is-info"
+                      tag="router-link"
+                      icon-right="magnify"
+                      :to="`user/${props.row.id}`"
+                    />
+                </b-table-column>
+
+                <b-table-column label="Editar" centered width="65">
+                    <b-button type="is-primary" icon-right="pencil" />
+                </b-table-column>
+
+                <b-table-column label="Excluir" centered width="65" >
+                    <b-button
+                      type="is-danger"
+                      icon-right="delete"
+                      v-on:click="remove(props.row.id)"
+                    />
+                </b-table-column>
+          </template>
           </b-table>
         </div>
       </div>
@@ -31,7 +64,7 @@
 </template>
 
 <script>
-import { getUsers } from '@/services/api'
+import { getUsers, deleteUser } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -43,32 +76,52 @@ export default {
   data() {
     return {
       userList: [],
-      columns: [
-        {
-          field: 'name',
-          label: 'Nome',
-          width: '250',
-        },
-        {
-          field: 'email',
-          label: 'E-mail',
-        },
-        {
-          field: 'type',
-          label: 'Tipo',
-        },
-      ],
-      perPage: 25,
+      perPage: 10,
     }
   },
   mounted() {
     this.$store.commit('loading', true)
 
-    getUsers()
-      .then(resp => {
-        this.userList = resp
-        this.$store.commit('loading', false);
+    this.loadUsers()
+  },
+  methods: {
+    loadUsers() {
+      getUsers()
+        .then(resp => {
+          this.userList = resp
+          this.$store.commit('loading', false)
+        })
+    },
+    remove(id) {
+      this.$store.commit('loading', true)
+      
+      deleteUser(id)
+        .then(resp => {
+          this.loadUsers()
+          this.success()
+          this.$store.commit('loading', false)
+        })
+        .catch(e => {
+          this.$store.commit('loading', false)
+          this.error()
+        })
+    },
+    success() {
+      this.$buefy.toast.open({
+        duration: 3000,
+        message: 'Usuário removido com sucesso!',
+        position: 'is-bottom',
+        type: 'is-success'
       })
+    },
+    error() {
+      this.$buefy.toast.open({
+        duration: 3000,
+        message: 'Houve um erro ao tentar remover o usuário!',
+        position: 'is-bottom',
+        type: 'is-danger'
+      })
+    },
   }
 }
 </script>
