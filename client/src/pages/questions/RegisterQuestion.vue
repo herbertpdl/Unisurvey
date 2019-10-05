@@ -29,55 +29,59 @@
             </div>
 
             <!-- Show if multiple -->
-            <div class="columns">
-              <div class="column is-6">
-                <p class="margin-bottom-1">Deseja permitir que o usuário selecione mais de uma opção?</p>
-                <div class="field">
-                    <b-switch 
-                      v-model="checkMultiple"
-                      true-value="Sim"
-                      false-value="Não"
-                    >
-                      {{ checkMultiple }}
-                    </b-switch>
+            <transition name="fade">
+              <div v-if="showAlternativesBox">
+                <div class="columns">
+                  <div class="column is-6">
+                    <p class="margin-bottom-1">Deseja permitir que o usuário selecione mais de uma opção?</p>
+                    <div class="field">
+                        <b-switch 
+                          v-model="checkMultiple"
+                          true-value="Sim"
+                          false-value="Não"
+                        >
+                          {{ checkMultiple }}
+                        </b-switch>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Add alternative -->
+                <label class="label">Alternativas</label>
+                <div class="columns">
+                  <div class="column is-6">
+                    <b-input v-model="description" />
+                  </div>
+                  <div class="column is-1">
+                    <b-button 
+                      v-if="alternatives.length < 20"
+                      type="is-success" 
+                      icon-right="plus"
+                      v-on:click="addAlternative"
+                    />
+                  </div>
+                </div>
+
+                <!-- Alternatives list -->
+                <div 
+                  v-for="(alternative, index) in alternatives" 
+                  :key="index"
+                  class="columns"
+                >
+                  <div class="column is-5">
+                    <p>{{ index+1 }}) {{ alternative }}</p>              
+                  </div>
+                  <div class="column is-1">
+                    <b-button
+                      size="is-small"
+                      type="is-danger" 
+                      icon-right="delete"
+                      v-on:click="deleteAlternative(index)"
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <!-- Add alternative -->
-            <label class="label">Alternativas</label>
-            <div class="columns">
-              <div class="column is-6">
-                <b-input v-model="description" />
-              </div>
-              <div class="column is-1">
-                <b-button 
-                  v-if="alternatives.length < 20"
-                  type="is-success" 
-                  icon-right="plus"
-                  v-on:click="addAlternative"
-                />
-              </div>
-            </div>
-
-            <!--  -->
-            <div 
-              v-for="(alternative, index) in alternatives" 
-              :key="index"
-              class="columns"
-            >
-              <div class="column is-5">
-                <p>{{ index+1 }}) {{ alternative }}</p>              
-              </div>
-              <div class="column is-1">
-                <b-button
-                  size="is-small"
-                  type="is-danger" 
-                  icon-right="delete"
-                  v-on:click="deleteAlternative(index)"
-                />
-              </div>
-            </div>
+            </transition>
 
             <div class="align-buttons--right">
               <b-button type="is-primary">
@@ -106,6 +110,12 @@ export default {
       checkMultiple: 'Não',
       alternatives: [],
       description: null,
+      showAlternativesBox: false,
+    }
+  },
+  watch: {
+    type: function(newValue) {
+      newValue === 'multiple' ? this.showAlternativesBox = true : this.showAlternativesBox = false;
     }
   },
   methods: {
