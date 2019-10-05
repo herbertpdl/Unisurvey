@@ -52,7 +52,7 @@
                     <b-button
                       type="is-danger"
                       icon-right="delete"
-                      v-on:click="remove(props.row.id)"
+                      v-on:click="confirmRemove(props.row.id)"
                     />
                 </b-table-column>
           </template>
@@ -91,6 +91,16 @@ export default {
           this.userList = resp
           this.$store.commit('loading', false)
         })
+    },
+    confirmRemove(id) {
+      this.$buefy.dialog.confirm({
+        title: 'Deletar usuário',
+        message: 'Tem certeza que quer deletar este usuário? Esta ação não pode ser desfeita.',
+        confirmText: 'Deletar usuário',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => this.remove(id)
+      })
     },
     remove(id) {
       this.$store.commit('loading', true)
