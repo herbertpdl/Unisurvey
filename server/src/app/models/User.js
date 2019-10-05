@@ -9,21 +9,25 @@ const auth = require("../../config/auth");
 
 module.exports = (sequelize, DataType) => {
   const User = sequelize.define(
-    "User",
+    "Usuario",
     {
-      name: DataType.STRING,
+      //id: DataType.INTEGER,
+      nome: DataType.STRING,
       email: DataType.STRING,
       password: DataType.VIRTUAL,
       password_hash: DataType.STRING,
-      type: DataType.INTEGER,
-      status: DataType.INTEGER
+      curso: DataType.INTEGER,
+      cpf: DataType.STRING,
+      tipo: DataType.STRING,
+      //type: DataType.INTEGER,
+      //status: DataType.INTEGER
     },
     {
-      tableName: "Users",
+      tableName: "Usuario",
       hooks: {
-        beforeSave: async user => {
-          if (user.password) {
-            user.password_hash = await bcrypt.hash(user.password, 8);
+        beforeSave: async usuario => {
+          if (usuario.password) {
+            usuaio.password_hash = await bcrypt.hash(usuario.password, 8);
           }
         }
       }
@@ -31,6 +35,7 @@ module.exports = (sequelize, DataType) => {
   );
 
   User.prototype.checkHash = function(password) {
+    console.log(usuario.password)
     return bcrypt.compare(password, this.password_hash);
   };
 

@@ -17,9 +17,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(250)
       },
-      senha: {
+      password_hash: {
         allowNull: false,
-        type: Sequelize.STRING(50)
+        type: Sequelize.STRING
       },
       curso: {
         allowNull: true,
