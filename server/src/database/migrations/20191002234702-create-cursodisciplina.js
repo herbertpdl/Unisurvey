@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('CursoDisciplina', {
+    return queryInterface.createTable('Cursodisciplina', {
       idCurso: {
         type: Sequelize.INTEGER,
         references: {
