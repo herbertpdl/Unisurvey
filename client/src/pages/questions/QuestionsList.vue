@@ -3,7 +3,7 @@
     <div class="container">
       <div class="columns">
         <div class="column is-12">
-          <h1 class="title">Lista de Usuários</h1>
+          <h1 class="title">Lista de Perguntas</h1>
           <b-select v-model="perPage">
               <option value="10">10 por página</option>
               <option value="15">15 por página</option>
@@ -16,19 +16,15 @@
             </b-button>
           </div>
           <b-table
-            :data="userList"
+            :data="questionList"
             :per-page="perPage"
             paginated
             striped
             hoverable
           >
           <template slot-scope="props">
-                <b-table-column label="Nome">
-                    {{ props.row.name }}
-                </b-table-column>
-
-                <b-table-column label="E-mail">
-                    {{ props.row.email }}
+                <b-table-column label="Enunciado">
+                    {{ props.row.statement }}
                 </b-table-column>
 
                 <b-table-column label="Tipo">
@@ -40,7 +36,7 @@
                       type="is-info"
                       tag="router-link"
                       icon-right="magnify"
-                      :to="`user/${props.row.id}/view`"
+                      :to="`question/${props.row.id}/view`"
                     />
                 </b-table-column>
 
@@ -49,7 +45,7 @@
                       type="is-primary"
                       tag="router-link"
                       icon-right="pencil"
-                      :to="`user/${props.row.id}/edit`"
+                      :to="`question/${props.row.id}/edit`"
                     />
                 </b-table-column>
 
@@ -69,34 +65,39 @@
 </template>
 
 <script>
-import { getUsers, deleteUser } from '@/services/api'
+import { getQuestions, deleteQuestion } from '@/services/api'
+
+import Card from  '@/components/Card'
 
 export default {
-  name: 'users-list',
+  name: 'questions-list',
+  components: {
+    Card,
+  },
   data() {
     return {
-      userList: [],
+      questionList: [],
       perPage: 10,
     }
   },
   mounted() {
     this.$store.commit('loading', true)
 
-    this.loadUsers()
+    this.loadQuestions()
   },
   methods: {
-    loadUsers() {
-      getUsers()
+    loadQuestions() {
+      getQuestions()
         .then(resp => {
-          this.userList = resp
+          this.questionList = resp
           this.$store.commit('loading', false)
         })
     },
     confirmRemove(id) {
       this.$buefy.dialog.confirm({
-        title: 'Deletar usuário',
-        message: 'Tem certeza que quer deletar este usuário? Esta ação não pode ser desfeita.',
-        confirmText: 'Deletar usuário',
+        title: 'Deletar pergunta',
+        message: 'Tem certeza que quer deletar esta pergunta? Esta ação não pode ser desfeita.',
+        confirmText: 'Deletar pergunta',
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => this.remove(id)
@@ -105,9 +106,9 @@ export default {
     remove(id) {
       this.$store.commit('loading', true)
       
-      deleteUser(id)
+      deleteQuestion(id)
         .then(resp => {
-          this.loadUsers()
+          this.loadQuestions()
           this.success()
           this.$store.commit('loading', false)
         })
@@ -119,7 +120,7 @@ export default {
     success() {
       this.$buefy.toast.open({
         duration: 3000,
-        message: 'Usuário removido com sucesso!',
+        message: 'Pergunta deletada com sucesso!',
         position: 'is-bottom',
         type: 'is-success'
       })
@@ -127,7 +128,7 @@ export default {
     error() {
       this.$buefy.toast.open({
         duration: 3000,
-        message: 'Houve um erro ao tentar remover o usuário!',
+        message: 'Houve um erro ao tentar deletar a pergunta!',
         position: 'is-bottom',
         type: 'is-danger'
       })

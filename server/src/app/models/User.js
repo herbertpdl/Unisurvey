@@ -25,13 +25,13 @@ module.exports = (sequelize, DataType) => {
     {
       tableName: "Usuario",
       hooks: {
-        beforeSave: async usuario => {
-          if (usuario.password) {
-            usuaio.password_hash = await bcrypt.hash(usuario.password, 8);
+        beforeSave: async user => {
+          if (user.password) {
+            user.password_hash = await bcrypt.hash(user.password, 8);
           }
         }
       }
-    }
+    },
   );
 
   User.prototype.checkHash = function(password) {

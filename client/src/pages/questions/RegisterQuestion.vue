@@ -62,10 +62,8 @@
                     <div class="field">
                         <b-switch 
                           v-model="checkMultiple"
-                          true-value="Sim"
-                          false-value="Não"
                         >
-                          {{ checkMultiple }}
+                          {{ checkMultiple ? 'Sim' : 'Não' }}
                         </b-switch>
                     </div>
                   </div>
@@ -83,7 +81,6 @@
                   </div>
                   <div class="column is-1">
                     <b-button
-                      v-if="alternatives.length < 20"
                       type="is-success"
                       icon-right="plus"
                       @click="addAlternative"
@@ -142,7 +139,7 @@ export default {
     return{
       statement: null,
       type: null,
-      checkMultiple: 'Não',
+      checkMultiple: false,
       alternatives: [],
       description: null,
       showAlternativesBox: false,

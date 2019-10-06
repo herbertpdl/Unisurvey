@@ -67,7 +67,6 @@
                     <option value="funcionário">Funcionário</option>
                   </b-select>
                 </b-field>
-                </b-field>
               </div>
             </div>
             <div v-if="userdata.type === 'aluno'" class="columns">
@@ -99,12 +98,13 @@
             <div class="align-buttons--right">
               <div class="buttons">
                 <b-button
-                  v-bind:type="edit ? 'is-secondary' : 'is-primary'"
+                  v-if="!edit"
+                  type="is-primary"
                   @click="enableEdit"
                 >
                   Editar
                 </b-button>
-                <b-button v-if="edit" type="is-primary" @click="save">
+                <b-button v-else type="is-primary" @click="save">
                   Enviar
                 </b-button>
               </div>
@@ -137,11 +137,16 @@ export default {
   },
   mounted() {
     this.$store.commit('loading', true)
+
     getUser(this.$route.params.id)
       .then(resp => {
         this.userdata = resp
         this.$store.commit('loading', false)  
       })
+
+    if (this.$route.params.viewtype === 'edit') {
+      this.enableEdit()
+    }
   },
   methods: {
     enableEdit() {
