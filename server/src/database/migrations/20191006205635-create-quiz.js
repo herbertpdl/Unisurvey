@@ -2,29 +2,37 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Questionario',{
+    return queryInterface.createTable('Quiz',{
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      nome: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING(50)
       },
-      tipo: {
+      type: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
-      professor: {
+      teacher: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE
       }
     })
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Questionario');
+    return queryInterface.dropTable('Quiz');
   }
 };

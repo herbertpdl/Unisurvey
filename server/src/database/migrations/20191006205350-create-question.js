@@ -2,18 +2,18 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Curso',{
+    return queryInterface.createTable('Question',{
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      nome: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING(50)
       },
-      periodo: {
+      type: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
@@ -29,6 +29,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Curso');
+    return queryInterface.dropTable('Question');
   }
 };

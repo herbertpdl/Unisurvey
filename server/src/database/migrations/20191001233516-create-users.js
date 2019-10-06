@@ -2,14 +2,14 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Usuario', {
+    return queryInterface.createTable('User', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      nome: {
+      name: {
         allowNull: false,
         type: Sequelize.STRING(50)
       },
@@ -21,7 +21,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      curso: {
+      course: {
         allowNull: true,
         type: Sequelize.INTEGER
       },
@@ -29,7 +29,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(20)
       },
-      tipo: {
+      type: {
         allowNull: false,
         type: Sequelize.STRING(50)
       },
@@ -45,6 +45,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Usuario');
+    return queryInterface.dropTable('User');
   }
 };

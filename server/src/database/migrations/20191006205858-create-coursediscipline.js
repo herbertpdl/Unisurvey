@@ -2,31 +2,39 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Cursodisciplina', {
-      idCurso: {
+    return queryInterface.createTable('Coursediscipline', {
+      idcourse: {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'curso',
+            tableName: 'course',
           },
           key: 'id'
         },
         allowNull: false
       },
-      idDisciplina: {
+      iddiscipline: {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'disciplina',
+            tableName: 'discipline',
           },
           key: 'id'
         },
         allowNull: false
       },
+      created_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updated_at: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
     });
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Cursodisciplina');
+    return queryInterface.dropTable('Coursediscipline');
   }
 };
