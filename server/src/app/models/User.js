@@ -9,21 +9,21 @@ const auth = require("../../config/auth");
 
 module.exports = (sequelize, DataType) => {
   const User = sequelize.define(
-    "Usuario",
+    "User",
     {
       //id: DataType.INTEGER,
-      nome: DataType.STRING,
+      name: DataType.STRING,
       email: DataType.STRING,
       password: DataType.VIRTUAL,
       password_hash: DataType.STRING,
-      curso: DataType.INTEGER,
+      course: DataType.INTEGER,
       cpf: DataType.STRING,
-      tipo: DataType.STRING,
+      type: DataType.STRING,
       //type: DataType.INTEGER,
       //status: DataType.INTEGER
     },
     {
-      tableName: "Usuario",
+      tableName: "User",
       hooks: {
         beforeSave: async user => {
           if (user.password) {
@@ -35,7 +35,6 @@ module.exports = (sequelize, DataType) => {
   );
 
   User.prototype.checkHash = function(password) {
-    console.log(usuario.password)
     return bcrypt.compare(password, this.password_hash);
   };
 

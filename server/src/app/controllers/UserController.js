@@ -13,13 +13,12 @@ class UserController {
 
       return res.json(
         {
-        nome: user.nome,
+        name: user.name,
         email: user.email, 
         password: user.password,
-        curso: user.curso,
+        course: user.course,
         cpf: user.cpf,
         tipo: user.tipo,
-        id: user.id, 
       });
     } catch (error) {
       return res.status(500).json({error: "Server Fail"})

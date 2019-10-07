@@ -14,7 +14,7 @@
 
               <!-- Surveys -->
               <b-navbar-dropdown label="Questionários">
-                <b-navbar-item tag="router-link" to="">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="/register-survey">Cadastrar</b-navbar-item>
                 <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
               </b-navbar-dropdown>
 

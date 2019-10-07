@@ -44,7 +44,8 @@
                 <!-- CPF -->
                 <b-field label="CPF">
                     
-                    <the-mask 
+                    <the-mask
+                      v-model="cpf" 
                       mask="###.###.###-##"
                       type="text"
                       placeholder="XX.XXX.XXX-X"
@@ -89,7 +90,7 @@
                       <option
                         v-for="(course, index) in courses"
                         v-bind:key="index"
-                        v-bind:value="course.name"
+                        v-bind:value="index"
                       >
                         {{ course.name }}
                       </option>
@@ -157,15 +158,17 @@ export default {
       this.$store.commit('loading', true)
       saveUser({
         name: this.name,
-        cpf: this.cnpf,
         email: this.email,
+        password: this.cpf,
+        course: this.course,
+        cpf: this.cpf,
         type: this.usertype,
-        course: this.course
       }).then(resp => {
           this.$store.commit('loading', false)
           this.isSuccessActive = true
         })
         .catch(err => {
+          this.$store.commit('loading', false)
           this.isErrorActive = true
         })
     }

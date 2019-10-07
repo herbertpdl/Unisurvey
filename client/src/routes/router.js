@@ -11,6 +11,8 @@ import RegisterCourse from '../pages/courses/RegisterCourse'
 import RegisterQuestion from '../pages/questions/RegisterQuestion'
 import QuestionList from '../pages/questions/QuestionsList'
 import ViewQuestion from '../pages/questions/ViewQuestion'
+import RegisterSurvey from '../pages/surveys/RegisterSurvey'
+import AnswerSurvey from '../pages/surveys/AnswerSurvey'
 
 Vue.use(Router)
 
@@ -65,6 +67,16 @@ let router = new Router({
       path: '/question/:id/:viewtype',
       name: 'view-question',
       component: ViewQuestion,
+    },
+    {
+      path: '/register-survey',
+      name: 'register-survey',
+      component: RegisterSurvey, 
+    },
+    {
+      path: '/answer-survey',
+      name: 'answer-survey',
+      component: AnswerSurvey, 
     },
   ]
 })

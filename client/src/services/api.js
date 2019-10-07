@@ -10,7 +10,7 @@ export function getUser(id) {
 }
 
 export function saveUser(data) {
-  return axios.post('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/getUsers', data).then(resp => resp.data)
+  return axios.post('http://localhost:3002/api/v1/user', data).then(resp => resp.data)
 }
 
 export function deleteUser(id) {
