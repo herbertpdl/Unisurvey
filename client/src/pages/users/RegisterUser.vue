@@ -4,10 +4,10 @@
       <div class="columns">
         <div class="column is-12">
           <!-- Success Message -->
-          <b-message 
-            auto-close 
+          <b-message
+            auto-close
             has-icon
-            title="Sucesso" 
+            title="Sucesso"
             type="is-success"
             :active.sync="isSuccessActive"
             :duration="5000"
@@ -17,10 +17,10 @@
           </b-message>
 
           <!-- Error Message -->
-          <b-message 
-            auto-close 
+          <b-message
+            auto-close
             has-icon
-            title="Sucesso" 
+            title="Sucesso"
             type="is-danger"
             :active.sync="isErrorActive"
             :duration="5000"
@@ -43,9 +43,8 @@
               <div class="column is-6">
                 <!-- CPF -->
                 <b-field label="CPF">
-                    
                     <the-mask
-                      v-model="cpf" 
+                      v-model="cpf"
                       mask="###.###.###-##"
                       type="text"
                       placeholder="XX.XXX.XXX-X"
