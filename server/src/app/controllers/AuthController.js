@@ -21,9 +21,12 @@ class AuthController {
     }
 
     return res.json({
-      id: user.id,
-      name: user.name,
-      email: user.email,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        type: user.type,
+      },
       token: user.createToken()
     });
   }

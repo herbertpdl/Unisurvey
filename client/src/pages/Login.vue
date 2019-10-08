@@ -3,11 +3,11 @@
     <div class="columns">
       <div class="column is-4 is-offset-4">
         <div class="columns">
-          <div class="column is-8 is-offset-2">
+          <div class="column is-10 is-offset-1">
             <!-- Form login -->
-            <card>
+            <card :class="'margin-top-5'">
               <b-field label="E-mail">
-                <b-input v-model="login" type="email" />
+                <b-input v-model="email" type="email" />
               </b-field>
               <b-field label="Senha">
                 <b-input v-model="password" type="password" password-reveal />
@@ -30,7 +30,7 @@
                     <div class="modal-card-body" style="text-align: left">
                       <p class="margin-bottom-1">Digite seu e-mail para recuperar sua senha.</p>
                       <b-field label="E-mail">
-                        <b-input v-model="login" type="email" />
+                        <b-input v-model="email" type="email" />
                       </b-field>
                       <b-button type="is-primary" style="float: right">
                         Recuperar
@@ -57,7 +57,7 @@ export default {
   },
   data() {
     return {
-      login: '',
+      email: '',
       password: '',
       loading: false,
       showRecoveryModal: false,
@@ -66,7 +66,20 @@ export default {
   },
   methods: {
     sendLogin() {
-      this.loading = true;
+      this.$store.commit('loading', true)
+      let email = this.email 
+      let password = this.password
+
+      this.$store.dispatch('login', { email, password })
+      .then(resp => {
+        console.log(resp)
+        this.$store.commit('loading', false)
+        this.$router.push('/home')
+      })
+      .catch(e => {
+        console.log(e)
+        this.$store.commit('loading', false)
+      })
     }
   }
 }

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from '../store'
 
 import Login from '../pages/Login'
 import Home from '../pages/home/Home'
@@ -27,58 +28,103 @@ let router = new Router({
       path: '/home',
       name: 'home',
       componen: Home,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/register-user',
       name: 'register-user',
-      component: RegisterUser, 
+      component: RegisterUser,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/user/:id/:viewtype',
       name: 'view-user',
       component: ViewUser,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/user-list',
       name: 'user-list',
-      component: UsersList, 
+      component: UsersList,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/register-matter',
       name: 'register-matter',
-      component: RegisterMatter, 
+      component: RegisterMatter,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/register-course',
       name: 'register-course',
-      component: RegisterCourse, 
+      component: RegisterCourse,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/register-question',
       name: 'register-question',
-      component: RegisterQuestion, 
+      component: RegisterQuestion,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/question-list',
       name: 'question-list',
-      component: QuestionList, 
+      component: QuestionList,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/question/:id/:viewtype',
       name: 'view-question',
       component: ViewQuestion,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/register-survey',
       name: 'register-survey',
-      component: RegisterSurvey, 
+      component: RegisterSurvey,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/answer-survey',
       name: 'answer-survey',
-      component: AnswerSurvey, 
+      component: AnswerSurvey,
+      meta: {
+        requiresAuth: true
+      }
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.isLoggedIn) {
+      next()
+      return
+    }
+    next('/') 
+  } else {
+    next() 
+  }
 })
 
 export default router

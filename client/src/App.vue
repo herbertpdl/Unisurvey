@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <b-loading :is-full-page="true" :active.sync="loading" />
-    <menu-header />
+    <menu-header v-if="showMenu" />
     <router-view />
   </div>
 </template>
@@ -20,6 +20,12 @@ export default {
     loading() {
       return this.$store.state.loading;
     },
+    showMenu() {
+      let show = null
+      this.$route.path === '/' ? show = false : show =  true
+
+      return show
+    }
   }
 };
 </script>

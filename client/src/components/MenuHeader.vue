@@ -41,7 +41,7 @@
 
             <template slot="end">
               <b-navbar-item tag="div">
-                <b-button type="is-primary">
+                <b-button type="is-primary" @click="logout">
                   Sair
                 </b-button>
               </b-navbar-item>
@@ -56,6 +56,19 @@
 <script>
 export default {
   name: 'menu-header',
+  methods: {
+    logout() {
+      this.$store.commit('loading', true)
+      this.$store.dispatch('logout')
+        .then(resp => {
+          this.$router.push('/')
+          this.$store.commit('loading', false)
+        })
+        .catch(e => {
+          this.$store.commit('loading', false)
+        })
+    }
+  }
 }
 </script>
 
