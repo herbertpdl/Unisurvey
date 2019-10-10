@@ -7,7 +7,7 @@ export function login(data) {
 
 //USERS
 export function getUsers() {
-  return axios.get('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/getUsers').then(resp => resp.data)
+  return axios.get('http://localhost:3002/api/v1/user').then(resp => resp.data)
 }
 
 export function getUser(id) {

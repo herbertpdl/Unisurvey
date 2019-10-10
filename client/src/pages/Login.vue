@@ -10,7 +10,12 @@
                 <b-input v-model="email" type="email" />
               </b-field>
               <b-field label="Senha">
-                <b-input v-model="password" type="password" password-reveal />
+                <b-input
+                  v-model="password"
+                  @keyup.native.enter="sendLogin"
+                  type="password" 
+                  password-reveal
+                />
               </b-field>
               <b-button type="is-primary" :loading="loading" @click="sendLogin">
                 Enviar
@@ -72,12 +77,10 @@ export default {
 
       this.$store.dispatch('login', { email, password })
       .then(resp => {
-        console.log(resp)
         this.$store.commit('loading', false)
         this.$router.push('/home')
       })
       .catch(e => {
-        console.log(e)
         this.$store.commit('loading', false)
       })
     }

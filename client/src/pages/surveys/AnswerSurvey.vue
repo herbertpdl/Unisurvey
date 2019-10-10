@@ -50,7 +50,12 @@
                       :key="indexAlternative"
                       class="field"
                     >
-                      <b-checkbox @click.native="addMultiple(alternative, index)" :native-value="alternative">
+                      <b-checkbox
+                        v-model="tempAnswers"
+                        @input="addMultiple(index)"
+                        :native-value="alternative"
+                        :name="`question${index}`"
+                      >
                         {{ alternative }}
                       </b-checkbox>
                     </div>
@@ -59,8 +64,11 @@
                 <hr>
               </div>
             </div>
+            <div class="align-buttons--right">
+              <div class="buttons">
+              </div>
+            </div>
             {{ answers }}
-            {{ answeredQuestions }}
           </card>
         </div>
       </div>
@@ -84,6 +92,7 @@ export default {
       surveyQuestions: [],
       totalQuestions: null,
       answeredQuestions: [],
+      tempAnswers: [],
     }
   },
   watch: {
@@ -103,8 +112,9 @@ export default {
       })
   },
   methods: {
-    addMultiple(value, index) {
-      this.answers[index] = value
+    addMultiple(index) {
+      this.answers[index] !== undefined ? this.answers[index].push(this.tempAnswers[0]) : this.answers[index] = this.tempAnswers
+      this.tempAnswers = []
     }
   },
   computed: {

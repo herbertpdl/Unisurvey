@@ -91,6 +91,15 @@ export default {
           this.userList = resp
           this.$store.commit('loading', false)
         })
+        .catch(e => {
+          this.$buefy.toast.open({
+            duration: 3000,
+            message: `Houve um erro ao buscar a lista de usuários, tente novamente mais tarde.`,
+            position: 'is-bottom',
+            type: 'is-danger'
+          })
+          this.$store.commit('loading', false)
+        })
     },
     confirmRemove(id) {
       this.$buefy.dialog.confirm({
