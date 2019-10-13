@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
   const auth = req.headers.authorization;
 
   if (!auth) {
-    return res.status(401).json({ error: "tokendadadada not exist" });
+    return res.status(401).json({ error: "token not exist" });
   }
 
   const [, token] = auth.split(" ");

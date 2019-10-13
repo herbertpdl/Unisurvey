@@ -3,7 +3,7 @@
     <div class="container">
       <div class="columns">
         <div class="column is-12">
-          <h1 class="title">Lista de Usuários</h1>
+          <h1 class="title">Lista de Disciplinas</h1>
           <b-select v-model="perPage">
               <option value="10">10 por página</option>
               <option value="15">15 por página</option>
@@ -22,45 +22,41 @@
             striped
             hoverable
           >
-          <template slot-scope="props">
-                <b-table-column label="Nome">
-                    {{ props.row.name }}
-                </b-table-column>
+            <template slot-scope="props">
+                  <b-table-column label="Nome da Disciplina">
+                      {{ props.row.name }}
+                  </b-table-column>
 
-                <b-table-column label="E-mail">
-                    {{ props.row.email }}
-                </b-table-column>
+                  <b-table-column label="Professor Responsável">
+                      {{ props.row.email }}
+                  </b-table-column>
 
-                <b-table-column label="Tipo">
-                    {{ props.row.type }}
-                </b-table-column>
+                  <b-table-column label="Visualizar" centered width="65">
+                      <b-button
+                        type="is-info"
+                        tag="router-link"
+                        icon-right="magnify"
+                        :to="`user/${props.row.id}/view`"
+                      />
+                  </b-table-column>
 
-                <b-table-column label="Visualizar" centered width="65">
-                    <b-button
-                      type="is-info"
-                      tag="router-link"
-                      icon-right="magnify"
-                      :to="`user/${props.row.id}/view`"
-                    />
-                </b-table-column>
+                  <b-table-column label="Editar" centered width="65">
+                      <b-button
+                        type="is-primary"
+                        tag="router-link"
+                        icon-right="pencil"
+                        :to="`user/${props.row.id}/edit`"
+                      />
+                  </b-table-column>
 
-                <b-table-column label="Editar" centered width="65">
-                    <b-button
-                      type="is-primary"
-                      tag="router-link"
-                      icon-right="pencil"
-                      :to="`user/${props.row.id}/edit`"
-                    />
-                </b-table-column>
-
-                <b-table-column label="Excluir" centered width="65" >
-                    <b-button
-                      type="is-danger"
-                      icon-right="delete"
-                      v-on:click="confirmRemove(props.row.id)"
-                    />
-                </b-table-column>
-          </template>
+                  <b-table-column label="Excluir" centered width="65" >
+                      <b-button
+                        type="is-danger"
+                        icon-right="delete"
+                        v-on:click="confirmRemove(props.row.id)"
+                      />
+                  </b-table-column>
+            </template>
           </b-table>
         </div>
       </div>
@@ -69,10 +65,10 @@
 </template>
 
 <script>
-import { getUsers, deleteUser } from '@/services/api'
+import { getMatters, getUsers } from '@/services/api'
 
 export default {
-  name: 'users-list',
+  name: 'matters-list',
   data() {
     return {
       userList: [],
@@ -82,13 +78,16 @@ export default {
   mounted() {
     this.$store.commit('loading', true)
 
-    this.loadUsers()
+    this.loadData()
   },
   methods: {
-    loadUsers() {
-      getUsers()
+    loadData() {
+      Promise.all([
+        getUsers(),
+        getMatters()
+      ])
         .then(resp => {
-          this.userList = resp
+          console.log(resp)
           this.$store.commit('loading', false)
         })
         .catch(e => {

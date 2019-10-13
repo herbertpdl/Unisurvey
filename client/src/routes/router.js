@@ -8,12 +8,14 @@ import RegisterUser from '../pages/users/RegisterUser'
 import UsersList from '../pages/users/UsersList'
 import ViewUser from '../pages/users/ViewUser'
 import RegisterMatter from '../pages/matters/RegisterMatter'
+import MattersList from '../pages/matters/MattersList'
 import RegisterCourse from '../pages/courses/RegisterCourse'
 import RegisterQuestion from '../pages/questions/RegisterQuestion'
 import QuestionList from '../pages/questions/QuestionsList'
 import ViewQuestion from '../pages/questions/ViewQuestion'
 import RegisterSurvey from '../pages/surveys/RegisterSurvey'
 import AnswerSurvey from '../pages/surveys/AnswerSurvey'
+import GetReport from '../pages/getReport'
 
 Vue.use(Router)
 
@@ -65,6 +67,14 @@ let router = new Router({
       }
     },
     {
+      path: '/matters-list',
+      name: 'matters-list',
+      component: MattersList,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
       path: '/register-course',
       name: 'register-course',
       component: RegisterCourse,
@@ -108,6 +118,14 @@ let router = new Router({
       path: '/answer-survey',
       name: 'answer-survey',
       component: AnswerSurvey,
+      meta: {
+        requiresAuth: true
+      }
+    },
+    {
+      path: '/get-report',
+      name: 'get-report',
+      component: GetReport,
       meta: {
         requiresAuth: true
       }

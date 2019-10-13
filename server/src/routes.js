@@ -15,7 +15,7 @@ routes.post("/auth", AuthController.store);
 routes.post("/user", UserController.store);
 // routes - private
 // user
-routes.get("/user", UserController.index);
+routes.get("/user",AuthMiddleware, UserController.index);
 routes.put("/user", UserController.update);
 routes.delete("/user", AuthMiddleware, UserController.delete);
 

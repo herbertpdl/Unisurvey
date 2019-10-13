@@ -2,9 +2,9 @@ const { User } = require("../models");
 
 class UserController {
   async index(req, res) {
-    const user = req.usuario;
+    const user = req.user;
 
-    return res.json({ id: user.id, email: user.email, name: user.name });
+    return res.json({ id: user.id, name: user.name, email: user.email, type: user.type });
   }
 
   async store(req, res) {
@@ -16,9 +16,8 @@ class UserController {
         name: user.name,
         email: user.email, 
         password: user.password,
-        course: user.course,
         cpf: user.cpf,
-        tipo: user.tipo,
+        type: user.type,
       });
     } catch (error) {
       return res.status(500).json({error: "Server Fail"})
@@ -29,12 +28,12 @@ class UserController {
     const user = req.user;
 
     const param = {
-      nome: req.body.nome,
+      name: req.body.name,
       email: req.body.email,
       password: req.body.password,
-      curso: req.body.curso,
+      course: req.body.course,
       cpf: req.body.cpf,
-      tipo: req.body.tipo,
+      type: req.body.type,
     };
 
     if (req.body.password) param.password = req.body.password;

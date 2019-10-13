@@ -33,7 +33,7 @@
               <!-- Matters -->
               <b-navbar-dropdown label="Disciplinas">
                 <b-navbar-item tag="router-link" to="/register-matter">Cadastrar</b-navbar-item>
-                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="/matters-list">Listar</b-navbar-item>
               </b-navbar-dropdown>
 
               <b-navbar-item tag="router-link" to="">Relatório</b-navbar-item>
