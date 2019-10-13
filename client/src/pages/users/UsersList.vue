@@ -88,6 +88,7 @@ export default {
     loadUsers() {
       getUsers()
         .then(resp => {
+          console.log(resp)
           this.userList = resp
           this.$store.commit('loading', false)
         })

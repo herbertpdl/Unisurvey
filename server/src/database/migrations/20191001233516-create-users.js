@@ -23,7 +23,8 @@ module.exports = {
       },
       course: {
         allowNull: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: null,
       },
       cpf: {
         allowNull: false,

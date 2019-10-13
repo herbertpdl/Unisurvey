@@ -4,6 +4,8 @@ const routes = express.Router();
 
 // middleware
 const AuthMiddleware = require("./app/middlewares/Auth");
+const UserMiddleware = require("./app/middlewares/User");
+
 
 // controllers
 const AuthController = require("./app/controllers/AuthController");
@@ -15,9 +17,25 @@ routes.post("/auth", AuthController.store);
 routes.post("/user", UserController.store);
 // routes - private
 // user
-routes.get("/user",AuthMiddleware, UserController.index);
-routes.put("/user", UserController.update);
-routes.delete("/user", AuthMiddleware, UserController.delete);
+routes.get(
+  "/user/:id",
+  AuthMiddleware,
+  UserMiddleware,
+  UserController.index
+)
+routes.get("/users",AuthMiddleware, UserController.getAll);
+routes.put(
+  "/user/:id",
+  AuthMiddleware,
+  UserMiddleware,
+  UserController.update
+);
+routes.delete(
+  "/user/:id",
+  AuthMiddleware,
+  UserMiddleware,
+  UserController.delete
+);
 
 // emplyees
 // routes.get("/employees", AuthMiddleware, EmployeeController.list);

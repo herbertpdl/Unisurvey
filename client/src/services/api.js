@@ -1,25 +1,29 @@
 import axios from 'axios'
+import { HTTP, HTTP_TOKEN } from './http';
 
 //LOGIN
 export function login(data) {
   return axios.post('http://localhost:3002/api/v1/auth', data).then(resp => resp.data)
 }
 
-//USERS
 export function getUsers() {
-  return axios.get('http://localhost:3002/api/v1/user').then(resp => resp.data)
+  return HTTP_TOKEN.get(`users`).then(resp => resp.data )
 }
 
 export function getUser(id) {
-  return axios.get(`https://5d891031b2568e0014d878d9.mockapi.io/api/v1/getUsers/${id}`).then(resp => resp.data)
+  return HTTP_TOKEN.get(`user/${id}`).then(resp => resp.data)
 }
 
 export function saveUser(data) {
-  return axios.post('http://localhost:3002/api/v1/user', data).then(resp => resp.data)
+  return HTTP.post('http://localhost:3002/api/v1/user', data).then(resp => resp.data)
 }
 
 export function deleteUser(id) {
-  return axios.delete(`https://5d891031b2568e0014d878d9.mockapi.io/api/v1/getUsers/${id}`).then(resp => resp.data)
+  return HTTP_TOKEN.delete(`user/${id}`).then(resp => resp.data)
+}
+
+export function updateUser(id, data) {
+  return HTTP_TOKEN.put(`user/${id}`, data).then(resp => resp.data)
 }
 
 export function getTeachers() {

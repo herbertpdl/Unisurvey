@@ -26,10 +26,10 @@
             :duration="5000"
             aria-close-label="Fechar mensagem"
           >
-            Houve um erro ao tentar salvar o usuário, verifique os dados digitados e tente novamente.
+            Houve um erro ao tentar salvar os dados do usuário, verifique os dados digitados e tente novamente.
           </b-message>
 
-          <h1 class="title">{{ userdata.name }}</h1>
+          <h1 class="title">{{ userName }}</h1>
           <card>
             <div class="columns">
               <div class="column is-6">
@@ -86,7 +86,7 @@
                       <option
                         v-for="(course, index) in courses"
                         v-bind:key="index"
-                        v-bind:value="course.name"
+                        v-bind:value="course.id"
                       >
                         {{ course.name }}
                       </option>
@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import { getUser, getCourses, saveUser } from '@/services/api'
+import { getUser, getCourses, updateUser } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -128,6 +128,7 @@ export default {
   },
   data() {
     return {
+      userName: null,
       userdata: null,
       edit: false,
       courses: null,
@@ -140,6 +141,7 @@ export default {
 
     getUser(this.$route.params.id)
       .then(resp => {
+        this.userName = resp.name
         this.userdata = resp
         this.$store.commit('loading', false)  
       })
@@ -160,19 +162,22 @@ export default {
     },
     save() {
       this.$store.commit('loading', true)
-      saveUser({
-        name: this.userdata.name,
-        cpf: this.userdata.cnpf,
-        email: this.userdata.email,
-        type: this.userdata.usertype,
-        course: this.userdata.course
-      }).then(resp => {
-          this.$store.commit('loading', false)
-          this.isSuccessActive = true
-        })
-        .catch(err => {
-          this.isErrorActive = true
-        })
+      updateUser  (
+        this.userdata.id,
+        {
+          name: this.userdata.name,
+          cpf: this.userdata.cpf,
+          email: this.userdata.email,
+          type: this.userdata.type,
+          course: this.userdata.course
+        }).then(resp => {
+            this.$store.commit('loading', false)
+            this.isSuccessActive = true
+          })
+          .catch(err => {
+            this.isErrorActive = true
+            this.$store.commit('loading', false)
+          })
     }
   }
 }

@@ -4,7 +4,25 @@ class UserController {
   async index(req, res) {
     const user = req.user;
 
-    return res.json({ id: user.id, name: user.name, email: user.email, type: user.type });
+    return res.json(user);
+  }
+
+  async getAll(req, res) {
+    var result = [];
+
+    result = await User.findAll();
+
+    return res.json(result);
+  }
+
+  async get(req, res) {
+    let id = req.param.id
+
+    result = await User.findOne({
+      where: {
+        id: id,
+      }
+    })
   }
 
   async store(req, res) {
@@ -15,12 +33,12 @@ class UserController {
         {
         name: user.name,
         email: user.email, 
-        password: user.password,
+        password: user.password_hash,
         cpf: user.cpf,
         type: user.type,
       });
     } catch (error) {
-      return res.status(500).json({error: "Server Fail"})
+      return res.status(500).json({error: error})
     }
   }
 
@@ -30,22 +48,18 @@ class UserController {
     const param = {
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password,
+      password_hash: req.body.password,
       course: req.body.course,
       cpf: req.body.cpf,
       type: req.body.type,
     };
 
-    if (req.body.password) param.password = req.body.password;
+    if (req.body.password) param.password_hash = req.body.password;
 
     user.update(param);
 
     return res.json({
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      type: user.type,
-      status: user.status
+      user
     });
   }
 
