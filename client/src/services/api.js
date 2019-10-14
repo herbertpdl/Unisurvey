@@ -59,7 +59,7 @@ export function getQuestion(id) {
 }
 
 export function saveQuestion(data) {
-  return axios.post('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/questions', data).then(resp => resp.data)
+  return  HTTP_TOKEN.post(`question`, data).then(resp => resp.data)
 }
 
 export function deleteQuestion(id) {

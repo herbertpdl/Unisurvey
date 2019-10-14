@@ -95,7 +95,7 @@
                       <table class="table is-striped">
                         <tr v-for="(alternative, index) in alternatives" :key="index">
                           <td width="100%">
-                            <p>{{ index+1 }}) {{ alternative }}</p>
+                            <p>{{ index+1 }}) {{ alternative.description }}</p>
                           </td>
                           <td>
                             <b-button
@@ -155,7 +155,7 @@ export default {
   methods: {
     addAlternative() {
       if (this.description !== null && this.alternatives.length < 5) {
-        this.alternatives.push(this.description)
+        this.alternatives.push({ description: this.description})
         this.description = null
         this.$refs.alternative.focus()
       } else if (this.description === null) {

@@ -10,12 +10,14 @@ const UserMiddleware = require("./app/middlewares/User");
 // controllers
 const AuthController = require("./app/controllers/AuthController");
 const UserController = require("./app/controllers/UserController");
+const QuestionController = require("./app/controllers/QuestionController");
 
 
 // routes - public
 routes.post("/auth", AuthController.store);
 routes.post("/user", AuthMiddleware, UserController.store);
 // routes - private
+
 // user
 routes.get(
   "/user/:id",
@@ -40,6 +42,10 @@ routes.delete(
   UserMiddleware,
   UserController.delete
 );
+
+//questions
+routes.post("/question", AuthMiddleware, QuestionController.store);
+
 
 // emplyees
 // routes.get("/employees", AuthMiddleware, EmployeeController.list);

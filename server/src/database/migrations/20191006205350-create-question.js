@@ -15,11 +15,12 @@ module.exports = {
       },
       type: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING(50)
       },
-      allowMultiple: {
+      allow_multiple: {
         allowNull: false,
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       created_at: {
         allowNull: false,
