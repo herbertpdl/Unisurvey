@@ -15,7 +15,7 @@ module.exports = {
       },
       teacher: {
         allowNull: false,
-        type: Sequelize.Integer,
+        type: Sequelize.INTEGER,
         references: {
           model: {
             tableName: 'user',

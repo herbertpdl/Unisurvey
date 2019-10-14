@@ -9,13 +9,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      statement: {
         allowNull: false,
         type: Sequelize.STRING(50)
       },
       type: {
         allowNull: false,
         type: Sequelize.INTEGER
+      },
+      allowMultiple: {
+        allowNull: false,
+        type: Sequelize.BOOLEAN
       },
       created_at: {
         allowNull: false,
