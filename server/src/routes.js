@@ -14,7 +14,7 @@ const UserController = require("./app/controllers/UserController");
 
 // routes - public
 routes.post("/auth", AuthController.store);
-routes.post("/user", UserController.store);
+routes.post("/user", AuthMiddleware, UserController.store);
 // routes - private
 // user
 routes.get(
@@ -23,13 +23,17 @@ routes.get(
   UserMiddleware,
   UserController.index
 )
-routes.get("/users",AuthMiddleware, UserController.getAll);
+routes.get("/users", AuthMiddleware, UserController.getAll);
+
+routes.get("/teachers", AuthMiddleware, UserController.getTeachers);
+
 routes.put(
   "/user/:id",
   AuthMiddleware,
   UserMiddleware,
   UserController.update
 );
+
 routes.delete(
   "/user/:id",
   AuthMiddleware,

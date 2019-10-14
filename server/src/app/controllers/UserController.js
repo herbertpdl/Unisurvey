@@ -9,20 +9,18 @@ class UserController {
 
   async getAll(req, res) {
     var result = [];
-
-    result = await User.findAll();
+    
+      result = await User.findAll();
 
     return res.json(result);
   }
 
-  async get(req, res) {
-    let id = req.param.id
+  async getTeachers(req, res) {
+    let result = []
 
-    result = await User.findOne({
-      where: {
-        id: id,
-      }
-    })
+    result = await User.findAll({ where: { type: 'professor' } });
+
+    return res.json(result);
   }
 
   async store(req, res) {
