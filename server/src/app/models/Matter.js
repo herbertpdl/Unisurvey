@@ -3,7 +3,8 @@ module.exports = (sequelize, DataType) => {
     "Matter",
     {
       name: DataType.STRING,
-      teacher: DataType.INTEGER,
+      teacher_id: DataType.INTEGER,
+      teacher_name: DataType.STRING,
     },
     {
       tableName: "Matter",

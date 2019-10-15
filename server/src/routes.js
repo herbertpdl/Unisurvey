@@ -5,12 +5,14 @@ const routes = express.Router();
 // middleware
 const AuthMiddleware = require("./app/middlewares/Auth");
 const UserMiddleware = require("./app/middlewares/User");
+const MatterMiddleware = require("./app/middlewares/Matter");
 
 
 // controllers
 const AuthController = require("./app/controllers/AuthController");
 const UserController = require("./app/controllers/UserController");
 const QuestionController = require("./app/controllers/QuestionController");
+const MatterController = require("./app/controllers/MatterController");
 
 
 // routes - public
@@ -46,6 +48,10 @@ routes.delete(
 //questions
 routes.post("/question", AuthMiddleware, QuestionController.store);
 
+//matters
+routes.post("/matter", AuthMiddleware, MatterController.store);
+routes.get("/matters", AuthMiddleware, MatterController.getAll);
+routes.delete("/matter/:id", AuthMiddleware, MatterMiddleware, MatterController.delete);
 
 // emplyees
 // routes.get("/employees", AuthMiddleware, EmployeeController.list);

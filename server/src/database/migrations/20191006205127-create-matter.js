@@ -13,7 +13,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(50)
       },
-      teacher: {
+      teacher_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
         references: {
@@ -22,6 +22,10 @@ module.exports = {
           },
           key: 'id'
         },
+      },
+      teacher_name: {
+        allowNull: false,
+        type: Sequelize.STRING(100  ),
       },
       created_at: {
         allowNull: false,
