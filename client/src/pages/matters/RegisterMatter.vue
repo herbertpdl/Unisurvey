@@ -62,7 +62,8 @@
                       <option
                         v-for="(teacher, index) in teachers"
                         v-bind:key="index"
-                        v-bind:value="teacher.name"
+                        v-bind:value="teacher.id
+                        "
                       >
                         {{ teacher.name }}
                       </option>

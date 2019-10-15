@@ -16,7 +16,7 @@
             </b-button>
           </div>
           <b-table
-            :data="userList"
+            :data="matterList"
             :per-page="perPage"
             paginated
             striped
@@ -28,7 +28,7 @@
                   </b-table-column>
 
                   <b-table-column label="Professor Responsável">
-                      {{ props.row.email }}
+                      {{ props.row.teacher }}
                   </b-table-column>
 
                   <b-table-column label="Visualizar" centered width="65">
@@ -71,7 +71,7 @@ export default {
   name: 'matters-list',
   data() {
     return {
-      userList: [],
+      matterList: [],
       perPage: 10,
     }
   },
@@ -87,13 +87,13 @@ export default {
         getMatters()
       ])
         .then(resp => {
-          console.log(resp)
+          this.matterList = resp[1]
           this.$store.commit('loading', false)
         })
         .catch(e => {
           this.$buefy.toast.open({
             duration: 5000,
-            message: `Houve um erro ao buscar a lista de usuários, tente novamente mais tarde.`,
+            message: `Houve um erro ao buscar a lista de disciplinas, tente novamente mais tarde.`,
             position: 'is-bottom',
             type: 'is-danger'
           })
@@ -102,9 +102,9 @@ export default {
     },
     confirmRemove(id) {
       this.$buefy.dialog.confirm({
-        title: 'Deletar usuário',
-        message: 'Tem certeza que quer deletar este usuário? Esta ação não pode ser desfeita.',
-        confirmText: 'Deletar usuário',
+        title: 'Deletar disciplina',
+        message: 'Tem certeza que quer deletar esta disciplina? Esta ação não pode ser desfeita.',
+        confirmText: 'Deletar disciplina',
         type: 'is-danger',
         hasIcon: true,
         onConfirm: () => this.remove(id)

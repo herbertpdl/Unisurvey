@@ -42,11 +42,11 @@ export function saveCourse(data) {
 
 //MATTERS
 export function getMatters() {
-  return axios.get('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/matters').then(resp => resp.data)
+  return HTTP_TOKEN.get(`matters`).then(resp => resp.data)
 }
 
 export function saveMatter(data) {
-  return axios.get('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/matters', data).then(resp => resp.data)
+  return HTTP_TOKEN.post(`matter`, data).then(resp => resp.data)
 }
 
 //QUESTIONS
