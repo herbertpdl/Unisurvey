@@ -1,5 +1,5 @@
 const { Question } = require("../models");
-const { Alvernative } = require("../models");
+const { Alternative } = require("../models");
 
 class QuestionController {
   async index(req, res) {
