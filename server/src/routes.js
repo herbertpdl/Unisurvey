@@ -6,6 +6,7 @@ const routes = express.Router();
 const AuthMiddleware = require("./app/middlewares/Auth");
 const UserMiddleware = require("./app/middlewares/User");
 const MatterMiddleware = require("./app/middlewares/Matter");
+const QuestionMiddleware = require("./app/middlewares/Question");
 
 
 // controllers
@@ -46,7 +47,14 @@ routes.delete(
 );
 
 //questions
+
+routes.get("/question", AuthMiddleware, QuestionController.getAll);
+
+routes.get("/question/:id", AuthMiddleware, QuestionMiddleware, QuestionController.index);
+
 routes.post("/question", AuthMiddleware, QuestionController.store);
+
+routes.delete("/question/:id", AuthMiddleware, QuestionMiddleware, QuestionController.delete);
 
 //matters
 routes.post("/matter", AuthMiddleware, MatterController.store);
