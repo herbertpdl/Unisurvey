@@ -4,10 +4,17 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Quizanswered', {
       idquiz: {
+        id: {
+          allowNull: false,
+          autoIncrement: true,
+          primaryKey: true,
+          unique: true,
+          type: Sequelize.INTEGER
+        },
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'quiz',
+            tableName: 'Quiz',
           },
           key: 'id'
         },
@@ -17,7 +24,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'user',
+            tableName: 'User',
           },
           key: 'id'
         },

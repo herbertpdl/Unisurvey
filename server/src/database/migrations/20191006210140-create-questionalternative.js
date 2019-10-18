@@ -3,11 +3,18 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Questionalternative', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        unique: true,
+        type: Sequelize.INTEGER
+      },
       idquestion: {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'question',
+            tableName: 'Question',
           },
           key: 'id'
         },
@@ -17,7 +24,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'alternative',
+            tableName: 'Alternative',
           },
           key: 'id'
         },

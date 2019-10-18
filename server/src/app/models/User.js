@@ -2,6 +2,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const auth = require("../../config/auth");
+const Sequelize = require("sequelize");
 
 // models
 // const UserType = require(".UserType");
@@ -11,7 +12,7 @@ module.exports = (sequelize, DataType) => {
   const User = sequelize.define(
     "User",
     {
-      //id: DataType.INTEGER,
+      id: { type: Sequelize.INTEGER, primaryKey: true },
       name: DataType.STRING,
       email: DataType.STRING,
       password: DataType.VIRTUAL,

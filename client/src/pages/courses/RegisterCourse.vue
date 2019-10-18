@@ -4,10 +4,10 @@
       <div class="columns">
         <div class="column is-12">
           <!-- Success Message -->
-          <b-message 
-            auto-close 
+          <b-message
+            auto-close
             has-icon
-            title="Sucesso" 
+            title="Sucesso"
             type="is-success"
             :active.sync="isSuccessActive"
             :duration="5000"
@@ -17,10 +17,10 @@
           </b-message>
 
           <!-- Error Message -->
-          <b-message 
-            auto-close 
+          <b-message
+            auto-close
             has-icon
-            title="Sucesso" 
+            title="Sucesso"
             type="is-danger"
             :active.sync="isErrorActive"
             :duration="5000"
@@ -34,7 +34,7 @@
           <b-message
             v-if="!hasMatters"
             :closable="false"
-            title="Você não tem nenhum professor cadastrado"
+            title="Você não tem nenhuma disciplina cadastrada"
             type="is-warning"
             aria-close-label="Close message"
           >

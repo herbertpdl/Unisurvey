@@ -7,7 +7,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'course',
+            tableName: 'Course',
           },
           key: 'id'
         },
@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'matter',
+            tableName: 'Matter',
           },
           key: 'id'
         },
@@ -32,7 +32,7 @@ module.exports = {
         type: Sequelize.DATE
       }
     });
-   },
+  },
 
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('Coursematter');

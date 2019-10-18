@@ -11,7 +11,7 @@ class QuestionController {
 
   async getAll(req, res) {
     var result = [];
-    
+
       result = await Question.findAll();
 
     return res.json(result);
@@ -27,25 +27,29 @@ class QuestionController {
 
       let question;
       let alternatives;
-      let questionalternatives;
+      let questionalternatives = false;
 
+      console.log(questionBody);
       if (req.body.type == 'discursive') {
         question = await Question.create({ ...questionBody });
+        console.log(question);
       } else {
         question = await Question.create({ ...questionBody });
         alternatives = await Alternative.bulkCreate( req.body.alternatives );
       }
 
       //Merge IdQuestions e IdAlternative in the table Questionalternative
+      if (alternatives) {
+        alternatives.map(val=> {
+          questionalternatives = Questionalternative.create({idquestion: question.id, idalternative: val.id});
+        })
+      }
 
-      alternatives.map(val=> {
-        questionalternatives = Questionalternative.create({idquestion: question.id, idalternative: val.id});
-      })
 
       return res.json(
       {
         statement: question.statement,
-        type: question.type, 
+        type: question.type,
         checkMultiple: question.checkMultiple,
       });
     } catch (error) {
