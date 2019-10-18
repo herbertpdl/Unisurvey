@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { getTeachers, saveMatter } from '@/services/api'
+import { getTeachers, getUser, saveMatter } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -122,18 +122,24 @@ export default {
   methods: {
     save() {
       this.$store.commit('loading', true);
-      saveMatter({
-        name: this.name,
-        teacher: this.teacher
-      })
+
+      getUser(this.teacher)
         .then(resp => {
-          this.$store.commit('loading', false)
-          this.isSuccessActive = true
+          saveMatter({
+            name: this.name,
+            teacher_id: this.teacher,
+            teacher_name: resp.name,
+          })
+            .then(resp => {
+              this.$store.commit('loading', false)
+              this.isSuccessActive = true
+            })
+            .catch(err => {
+              this.isErrorActive = true
+            })
         })
-        .catch(err => {
-          this.isErrorActive = true
-        })
-    }
+      
+    },
   }
 }
 </script>

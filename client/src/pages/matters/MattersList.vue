@@ -28,7 +28,7 @@
                   </b-table-column>
 
                   <b-table-column label="Professor Responsável">
-                      {{ props.row.teacher }}
+                      {{ props.row.teacher_name }}
                   </b-table-column>
 
                   <b-table-column label="Visualizar" centered width="65">
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { getMatters, getUsers } from '@/services/api'
+import { getMatters, deleteMatter } from '@/services/api'
 
 export default {
   name: 'matters-list',
@@ -82,12 +82,9 @@ export default {
   },
   methods: {
     loadData() {
-      Promise.all([
-        getUsers(),
-        getMatters()
-      ])
+      getMatters()
         .then(resp => {
-          this.matterList = resp[1]
+          this.matterList = resp
           this.$store.commit('loading', false)
         })
         .catch(e => {
@@ -113,9 +110,9 @@ export default {
     remove(id) {
       this.$store.commit('loading', true)
       
-      deleteUser(id)
+      deleteMatter(id)
         .then(resp => {
-          this.loadUsers()
+          this.loadData()
           this.success()
           this.$store.commit('loading', false)
         })
@@ -127,7 +124,7 @@ export default {
     success() {
       this.$buefy.toast.open({
         duration: 3000,
-        message: 'Usuário removido com sucesso!',
+        message: 'Disciplina excluída com sucesso!',
         position: 'is-bottom',
         type: 'is-success'
       })
@@ -135,7 +132,7 @@ export default {
     error() {
       this.$buefy.toast.open({
         duration: 3000,
-        message: 'Houve um erro ao tentar remover o usuário!',
+        message: 'Houve um erro ao tentar remover a disciplina!',
         position: 'is-bottom',
         type: 'is-danger'
       })

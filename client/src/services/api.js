@@ -49,6 +49,10 @@ export function saveMatter(data) {
   return HTTP_TOKEN.post(`matter`, data).then(resp => resp.data)
 }
 
+export function deleteMatter(id) {
+  return HTTP_TOKEN.delete(`matter/${id}`).then(resp => resp.data)
+}
+
 //QUESTIONS
 export function getQuestions() {
   return axios.get('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/questions').then(resp => resp.data)
