@@ -1,5 +1,6 @@
 const { Question } = require("../models");
-const { Alvernative } = require("../models");
+const { Alternative } = require("../models");
+const { Questionalternative } = require("../models");
 
 class QuestionController {
   async index(req, res) {
@@ -26,16 +27,20 @@ class QuestionController {
 
       let question;
       let alternatives;
+      let questionalternatives;
 
       if (req.body.type == 'discursive') {
         question = await Question.create({ ...questionBody });
       } else {
         question = await Question.create({ ...questionBody });
-
-        alternatives = await Alternative.bulkCreate( req.body.alternatives )
+        alternatives = await Alternative.bulkCreate( req.body.alternatives );
       }
 
-      console.log(req.body)
+      //Merge IdQuestions e IdAlternative in the table Questionalternative
+
+      alternatives.map(val=> {
+        questionalternatives = Questionalternative.create({idquestion: question.id, idalternative: val.id});
+      })
 
       return res.json(
       {

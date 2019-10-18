@@ -44,5 +44,7 @@ module.exports = (sequelize, DataType) => {
     });
   };
 
+  //User.create({ name: 'Claudio', email: 'claudio@claudio.com', password: '123456', course: '1', cpf: '12345678910', type: 'Admin' });
+
   return User;
 };

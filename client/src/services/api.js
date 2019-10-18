@@ -55,11 +55,11 @@ export function deleteMatter(id) {
 
 //QUESTIONS
 export function getQuestions() {
-  return axios.get('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/questions').then(resp => resp.data)
+  return HTTP_TOKEN.get(`question`).then(resp => resp.data)
 }
 
 export function getQuestion(id) {
-  return axios.get(`https://5d891031b2568e0014d878d9.mockapi.io/api/v1/questions/${id}`).then(resp => resp.data)
+  return  HTTP_TOKEN.get(`question/${id}`).then(resp => resp.data)
 }
 
 export function saveQuestion(data) {
@@ -67,5 +67,5 @@ export function saveQuestion(data) {
 }
 
 export function deleteQuestion(id) {
-  return axios.delete(`https://5d891031b2568e0014d878d9.mockapi.io/api/v1/questions/${id}`).then(resp => resp.data)
+  return  HTTP_TOKEN.delete(`question/${id}`).then(resp => resp.data)
 }
