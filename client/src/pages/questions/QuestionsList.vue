@@ -28,7 +28,7 @@
                 </b-table-column>
 
                 <b-table-column label="Tipo">
-                    {{ props.row.type }}
+                    {{ props.row.type == 'discursive' ? "Discursiva" : "Múltipla Escolha"}}
                 </b-table-column>
 
                 <b-table-column label="Visualizar" centered width="65">
