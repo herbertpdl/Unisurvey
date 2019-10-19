@@ -136,7 +136,7 @@ export default {
       cpf: '',
       email: '',
       usertype: '',
-      course: '',
+      course: null,
       courses: [],
       isSuccessActive: false,
       isErrorActive: false,
