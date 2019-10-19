@@ -31,20 +31,21 @@ class QuestionController {
 
       console.log(questionBody);
       if (req.body.type == 'discursive') {
-        question = await Question.create({ ...questionBody });
-        console.log(question);
+        question = await Question.create({ ...questionBody });        
       } else {
         question = await Question.create({ ...questionBody });
-        alternatives = await Alternative.bulkCreate( req.body.alternatives );
+        alternatives = await Alternative.bulkCreate( req.body.alternatives );              
       }
 
       //Merge IdQuestions e IdAlternative in the table Questionalternative
+      
       if (alternatives) {
         alternatives.map(val=> {
           questionalternatives = Questionalternative.create({idquestion: question.id, idalternative: val.id});
         })
       }
 
+      
 
       return res.json(
       {
