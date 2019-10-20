@@ -57,15 +57,11 @@ class QuestionController {
     };
 
     await Questionalternative.destroy({ where: { idquestion: question.id } })
-      .then(() => {
-        if(question.type === 'multiple') {
-          req.body.alternatives.map(el => {
-            Object.assign(el, {idquestion: question.id})
-          })
-        }
-      })
 
-    if(question.type === 'multiple') {
+    if(questionBody.type === 'multiple') {
+      req.body.alternatives.map(el => {
+        Object.assign(el, {idquestion: question.id})
+      })
       await Questionalternative.bulkCreate(req.body.alternatives );     
     }
 
