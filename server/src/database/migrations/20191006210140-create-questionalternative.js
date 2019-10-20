@@ -20,15 +20,9 @@ module.exports = {
         },
         allowNull: false
       },
-      idalternative: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: {
-            tableName: 'Alternative',
-          },
-          key: 'id'
-        },
-        allowNull: false
+      description: {
+        allowNull: false,
+        type: Sequelize.STRING(150)
       },
       created_at: {
         allowNull: false,

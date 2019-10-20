@@ -4,10 +4,6 @@ const jwt = require("jsonwebtoken");
 const auth = require("../../config/auth");
 const Sequelize = require("sequelize");
 
-// models
-// const UserType = require(".UserType");
-// const UserStatus = require(".UserStatus");
-
 module.exports = (sequelize, DataType) => {
   const User = sequelize.define(
     "User",
@@ -20,8 +16,6 @@ module.exports = (sequelize, DataType) => {
       course: DataType.INTEGER,
       cpf: DataType.STRING,
       type: DataType.STRING,
-      //type: DataType.INTEGER,
-      //status: DataType.INTEGER
     },
     {
       tableName: "User",
@@ -44,8 +38,6 @@ module.exports = (sequelize, DataType) => {
       expiresIn: auth.ttl
     });
   };
-
-  //User.create({ name: 'Claudio', email: 'claudio@claudio.com', password: '123456', course: '1', cpf: '12345678910', type: 'Admin' });
-
+  
   return User;
 };

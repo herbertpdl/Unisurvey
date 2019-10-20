@@ -13,6 +13,7 @@ const QuestionMiddleware = require("./app/middlewares/Question");
 const AuthController = require("./app/controllers/AuthController");
 const UserController = require("./app/controllers/UserController");
 const QuestionController = require("./app/controllers/QuestionController");
+const AlternativeController = require("./app/controllers/AlternativeController");
 const MatterController = require("./app/controllers/MatterController");
 
 
@@ -54,57 +55,47 @@ routes.get("/question/:id", AuthMiddleware, QuestionMiddleware, QuestionControll
 
 routes.post("/question", AuthMiddleware, QuestionController.store);
 
-routes.delete("/question/:id", AuthMiddleware, QuestionMiddleware, QuestionController.delete);
+routes.put(
+  "/question/:id",
+  AuthMiddleware,
+  QuestionMiddleware,
+  QuestionController.update
+)
+
+routes.delete(
+  "/question/:id",
+  AuthMiddleware,
+  QuestionMiddleware,
+  QuestionController.delete
+);
+
+//alternatives
+routes.get("/alternatives/:idquestion", AuthMiddleware, AlternativeController.getByQuestion)
 
 //matters
 routes.post("/matter", AuthMiddleware, MatterController.store);
+
 routes.get("/matters", AuthMiddleware, MatterController.getAll);
-routes.delete("/matter/:id", AuthMiddleware, MatterMiddleware, MatterController.delete);
 
-// emplyees
-// routes.get("/employees", AuthMiddleware, EmployeeController.list);
-// routes.post("/employees", AuthMiddleware, EmployeeController.store);
-// routes.put(
-//   "/employees/:id",
-//   AuthMiddleware,
-//   EmployeeMiddleware,
-//   EmployeeController.update
-// );
-// routes.get(
-//   "/employees/:id",
-//   AuthMiddleware,
-//   EmployeeMiddleware,
-//   EmployeeController.index
-// );
-// routes.delete(
-//   "/employees/:id",
-//   AuthMiddleware,
-//   EmployeeMiddleware,
-//   EmployeeController.delete
-// );
-// // companys
-// routes.get("/companys", AuthMiddleware, CompanyController.index);
-// routes.post("/companys", AuthMiddleware, CompanyController.store);
-// routes.put(
-//   "/companys/:id",
-//   AuthMiddleware,
-//   CompanyMiddleware,
-//   CompanyController.update
-// );
-// routes.get(
-//   "/companys/:id",
-//   AuthMiddleware,
-//   CompanyMiddleware,
-//   CompanyController.index
-// );
-// routes.delete(
-//   "/companys/:id",
-//   AuthMiddleware,
+routes.put(
+  "/matter/:id",
+  AuthMiddleware,
+  MatterMiddleware,
+  MatterController.update
+)
 
-//   CompanyMiddleware,
+routes.get(
+  "/matter/:id",
+  AuthMiddleware,
+  MatterMiddleware,
+  MatterController.index
+);
 
-//   CompanyController.delete
-// );
-
+routes.delete(
+  "/matter/:id",
+  AuthMiddleware,
+  MatterMiddleware,
+  MatterController.delete
+);
 
 module.exports = routes;

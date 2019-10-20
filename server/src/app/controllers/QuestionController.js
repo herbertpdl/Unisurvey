@@ -1,5 +1,4 @@
 const { Question } = require("../models");
-const { Alternative } = require("../models");
 const { Questionalternative } = require("../models");
 
 class QuestionController {
@@ -26,26 +25,16 @@ class QuestionController {
       }
 
       let question;
-      let alternatives;
-      let questionalternatives = false;
 
-      console.log(questionBody);
-      if (req.body.type == 'discursive') {
-        question = await Question.create({ ...questionBody });        
-      } else {
-        question = await Question.create({ ...questionBody });
-        alternatives = await Alternative.bulkCreate( req.body.alternatives );              
-      }
+      question = await Question.create({ ...questionBody });
 
-      //Merge IdQuestions e IdAlternative in the table Questionalternative
-      
-      if (alternatives) {
-        alternatives.map(val=> {
-          questionalternatives = Questionalternative.create({idquestion: question.id, idalternative: val.id});
+      if (req.body.type == 'multiple') {
+        req.body.alternatives.map(el => {
+          Object.assign(el, {idquestion: question.id})
         })
-      }
 
-      
+        await Questionalternative.bulkCreate(req.body.alternatives );              
+      }
 
       return res.json(
       {
@@ -59,30 +48,41 @@ class QuestionController {
   }
 
   async update(req, res) {
-    const user = req.user;
+    const question = req.question;
 
-    const param = {
-      name: req.body.name,
-      email: req.body.email,
-      password_hash: req.body.password,
-      course: req.body.course,
-      cpf: req.body.cpf,
+    const questionBody = {
+      statement: req.body.statement,
       type: req.body.type,
+      checkMultiple: req.body.checkMultiple
     };
 
-    if (req.body.password) param.password_hash = req.body.password;
+    await Questionalternative.destroy({ where: { idquestion: question.id } })
+      .then(() => {
+        if(question.type === 'multiple') {
+          req.body.alternatives.map(el => {
+            Object.assign(el, {idquestion: question.id})
+          })
+        }
+      })
 
-    user.update(param);
+    if(question.type === 'multiple') {
+      await Questionalternative.bulkCreate(req.body.alternatives );     
+    }
+
+    question.update(questionBody);
 
     return res.json({
-      user
+      question
     });
   }
 
   async delete(req, res) {
     const question = req.question;
 
-    question.destroy();
+    await Questionalternative.destroy({ where: { idquestion: question.id} })
+      .then(() => {
+        question.destroy();
+      })
 
     return res.json({ msg: "Success question deleted" });
   }

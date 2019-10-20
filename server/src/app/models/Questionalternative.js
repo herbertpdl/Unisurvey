@@ -5,7 +5,7 @@ module.exports = (sequelize, DataType) => {
       "Questionalternative",
       {        
         idquestion: DataType.INTEGER,
-        idalternative: DataType.INTEGER
+        description: DataType.STRING
       },
       {
         tableName: "Questionalternative",
