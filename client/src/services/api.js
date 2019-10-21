@@ -19,7 +19,7 @@ export function getUser(id) {
 }
 
 export function saveUser(data) {
-  return HTTP_TOKEN.post('http://localhost:3002/api/v1/user', data).then(resp => resp.data)
+  return HTTP_TOKEN.post(`user`, data).then(resp => resp.data)
 }
 
 export function deleteUser(id) {
@@ -36,7 +36,7 @@ export function getCourses() {
 }
 
 export function saveCourse(data) {
-  return axios.post('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/getCourses', data).then(resp => resp.data)
+  return HTTP_TOKEN.post(`course`, data).then(resp => resp.data)
 }
 
 

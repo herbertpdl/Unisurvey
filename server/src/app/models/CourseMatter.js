@@ -2,8 +2,8 @@ module.exports = (sequelize, DataType) => {
   const Course = sequelize.define(
     "Curso",
     {
-      name: DataType.STRING,
-      period: DataType.INTEGER,
+      idcourse: DataType.INTEGER,
+      iddiscipline: DataType.INTEGER,
     },
     {
       freezeTableName: true

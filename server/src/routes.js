@@ -7,6 +7,7 @@ const AuthMiddleware = require("./app/middlewares/Auth");
 const UserMiddleware = require("./app/middlewares/User");
 const MatterMiddleware = require("./app/middlewares/Matter");
 const QuestionMiddleware = require("./app/middlewares/Question");
+const CourseMiddleware = require("./app/middlewares/Course");
 
 
 // controllers
@@ -15,6 +16,7 @@ const UserController = require("./app/controllers/UserController");
 const QuestionController = require("./app/controllers/QuestionController");
 const AlternativeController = require("./app/controllers/AlternativeController");
 const MatterController = require("./app/controllers/MatterController");
+const CourseController = require("./app/controllers/CourseController");
 
 
 // routes - public
@@ -97,5 +99,10 @@ routes.delete(
   MatterMiddleware,
   MatterController.delete
 );
+
+//courses
+routes.post("course", AuthMiddleware, CourseController.store);
+
+routes.get("course", AuthMiddleware, CourseMiddleware, CourseController.index)
 
 module.exports = routes;
