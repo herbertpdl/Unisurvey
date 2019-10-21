@@ -36,7 +36,7 @@
                         type="is-info"
                         tag="router-link"
                         icon-right="magnify"
-                        :to="`user/${props.row.id}/view`"
+                        :to="`matter/${props.row.id}/view`"
                       />
                   </b-table-column>
 
@@ -45,7 +45,7 @@
                         type="is-primary"
                         tag="router-link"
                         icon-right="pencil"
-                        :to="`user/${props.row.id}/edit`"
+                        :to="`matter/${props.row.id}/edit`"
                       />
                   </b-table-column>
 

@@ -41,7 +41,15 @@
             <div class="columns">
               <div class="column is-6">
                 <b-field label="Tipo">
-                  <b-input :disabled="!edit" v-model="questionData.type" />
+                  <b-select
+                    expanded
+                    :disabled="!edit"
+                    v-model="questionData.type"
+                    placeholder="Selecione"
+                  >
+                    <option value="discursive">Discursiva</option>
+                    <option value="multiple">Múltipla Escolha</option>
+                  </b-select>
                 </b-field>
               </div>
             </div>
@@ -84,9 +92,9 @@
               <div class="column is-6">
                 <div class="b-table">
                   <table class="table is-striped">
-                    <tr v-for="(alternative, index) in questionData.alternatives" :key="index">
+                    <tr v-for="(alternative, index) in alternatives" :key="index">
                       <td width="100%">
-                        <p>{{ index+1 }}) {{ alternative }}</p>
+                        <p>{{ index+1 }}) {{ alternative.description }}</p>
                       </td>
                       <td>
                         <b-button
@@ -125,7 +133,7 @@
 </template>
 
 <script>
-import { getQuestion, saveQuestion } from '@/services/api'
+import { getQuestion, updateQuestion, getAlternativesByQuestion } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -141,6 +149,7 @@ export default {
       isSuccessActive: false,
       isErrorActive: false,
       description: null,
+      alternatives: null,
     }
   },
   mounted() {
@@ -152,6 +161,11 @@ export default {
         this.$store.commit('loading', false)  
       })
 
+    getAlternativesByQuestion(this.$route.params.id)
+      .then(resp => {
+        this.alternatives = resp
+      })
+
     if (this.$route.params.viewtype === 'edit') {
       this.enableEdit()
     }
@@ -161,8 +175,8 @@ export default {
       this.edit = true
     },
     addAlternative() {
-      if (this.description !== null && this.questionData.alternatives.length < 5) {
-        this.questionData.alternatives.push(this.description)
+      if (this.description !== null && this.alternatives.length < 5) {
+        this.alternatives.push({description: this.description})
         this.description = null
         this.$refs.alternative.focus()
       } else if (this.description === null) {
@@ -172,18 +186,22 @@ export default {
       }
     },
     deleteAlternative(index) {
-      this.questionData.alternatives.splice(index, 1)
+      this.alternatives.splice(index, 1)
     },
     save() {
       this.$store.commit('loading', true)
-      saveQuestion({
-        statement: this.questionData.statement,
-        type: this.questionData.type,
-        checkMultiple: this.questionData.checkMultiple,
-        alternatives: this.questionData.alternatives,
-      })
+      updateQuestion(
+        this.questionData.id,
+        {
+          statement: this.questionData.statement,
+          type: this.questionData.type,
+          checkMultiple: this.questionData.checkMultiple,
+          alternatives: this.alternatives,
+        }
+      )
         .then(resp => {
           this.$store.commit('loading', false)
+          this.$router.push("/question-list")
           this.isSuccessActive = true
         })
         .catch(err => {
