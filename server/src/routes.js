@@ -101,6 +101,8 @@ routes.delete(
 );
 
 //courses
+routes.get("/course/:id", CourseMiddleware, CourseController.index)
+
 routes.post("/course", AuthMiddleware, CourseController.store);
 
 routes.get("/course", AuthMiddleware, CourseMiddleware, CourseController.index)

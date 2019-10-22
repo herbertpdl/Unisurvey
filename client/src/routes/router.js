@@ -15,6 +15,7 @@ import MattersList from '../pages/matters/MattersList'
 import ViewMatter from '../pages/matters/ViewMatter'
 // Course
 import RegisterCourse from '../pages/courses/RegisterCourse'
+import ViewCourse from '../pages/courses/ViewCourse'
 // Question
 import RegisterQuestion from '../pages/questions/RegisterQuestion'
 import QuestionList from '../pages/questions/QuestionsList'
@@ -97,6 +98,14 @@ let router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/course/:id/:viewtype',
+      name: 'view-course',
+      component: ViewCourse,
+      meta: {
+        requiresAuth: true
+      },
     },
     {
       path: '/register-question',
