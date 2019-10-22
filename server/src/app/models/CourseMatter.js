@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataType) => {
-  const Course = sequelize.define(
-    "Curso",
+  const Coursematter = sequelize.define(
+    "Coursematter",
     {
       idcourse: DataType.INTEGER,
       iddiscipline: DataType.INTEGER,
@@ -8,8 +8,9 @@ module.exports = (sequelize, DataType) => {
     {
       freezeTableName: true
     }
-    
   );
 
-  return Course;
+  Coursematter.removeAttribute('id');
+
+  return Coursematter;
 };

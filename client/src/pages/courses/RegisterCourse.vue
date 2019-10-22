@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     save() {
-      this.$store.commit('loading', true);
+      this.$store.commit('loading', true)
       saveCourse({
         name: this.name,
         period: this.period,
@@ -159,6 +159,7 @@ export default {
           this.isSuccessActive = true
         })
         .catch((err) => {
+          this.$store.commit('loading', false)
           this.isErrorActive = true
         })
     }

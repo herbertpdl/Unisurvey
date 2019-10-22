@@ -1,4 +1,5 @@
 const { Course } = require("../models");
+const { Coursematter } = require("../models");
 
 class CourseController {
   async index(req, res) {
@@ -18,14 +19,28 @@ class CourseController {
   async store(req, res) {
     try {
 
-      console.log(req.body)
+      const courseBody = {
+        name: req.body.name,
+        period: req.body.period,
+      }
 
-      let course = await Course.create({ ...req.body });
+      const course = await Course.create({ ...courseBody });
+
+      const matters = [];
+      
+      req.body.matters.map((el, index) => {
+        matters[index] = {
+          idcourse: course.id,
+          iddiscipline: el.id,
+        }
+      })
+
+      Coursematter.bulkCreate(matters);
 
       return res.json(
       {
         name: course.name,
-        perios: course.period,
+        period: course.period,
       });
     } catch (error) {
       return res.status(500).json({error: error})
