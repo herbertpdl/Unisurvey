@@ -32,7 +32,7 @@ export function updateUser(id, data) {
 
 // COURSES
 export function getCourses() {
-  return axios.get('https://5d891031b2568e0014d878d9.mockapi.io/api/v1/getCourses').then(resp => resp.data)
+  return HTTP_TOKEN.get(`courses`).then(resp => resp.data)
 }
 
 export function getCourse(id) {
@@ -41,6 +41,10 @@ export function getCourse(id) {
 
 export function saveCourse(data) {
   return HTTP_TOKEN.post(`course`, data).then(resp => resp.data)
+}
+
+export function deleteCourse(id) {
+  return HTTP_TOKEN.delete(`course/${id}`).then(resp => resp.data)
 }
 
 

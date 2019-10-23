@@ -105,6 +105,8 @@ routes.get("/course/:id", CourseMiddleware, CourseController.index)
 
 routes.post("/course", AuthMiddleware, CourseController.store);
 
-routes.get("/course", AuthMiddleware, CourseMiddleware, CourseController.index)
+routes.get("/courses", AuthMiddleware, CourseController.getAll)
+
+routes.delete("/course/:id", AuthMiddleware, CourseMiddleware, CourseController.delete);
 
 module.exports = routes;
