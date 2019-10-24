@@ -33,7 +33,7 @@ class QuestionController {
           Object.assign(el, {idquestion: question.id})
         })
 
-        await Questionalternative.bulkCreate(req.body.alternatives );              
+        await Questionalternative.bulkCreate(req.body.alternatives );
       }
 
       return res.json(
@@ -62,7 +62,7 @@ class QuestionController {
       req.body.alternatives.map(el => {
         Object.assign(el, {idquestion: question.id})
       })
-      await Questionalternative.bulkCreate(req.body.alternatives );     
+      await Questionalternative.bulkCreate(req.body.alternatives );
     }
 
     question.update(questionBody);

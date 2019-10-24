@@ -14,5 +14,9 @@ module.exports = (sequelize, DataType) => {
     },
   );
 
+  Matter.associate = function (models) {
+    Matter.belongsToMany(models.Course, {through: 'CourseMatter', as: 'Course'});
+  };
+
   return Matter;
 };

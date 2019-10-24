@@ -8,8 +8,11 @@ module.exports = (sequelize, DataType) => {
     {
       freezeTableName: true
     }
-    
   );
+
+  Course.associate = function (models) {
+    Course.belongsToMany(models.Matter, {through: 'CourseMatter', as: 'Matter'});
+  };
 
   return Course;
 };
