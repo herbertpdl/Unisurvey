@@ -71,6 +71,11 @@ class CourseController {
 
     course.destroy();
 
+    await Coursematter.destroy ({where: {idcourse: course.id} })
+      .then (() => {
+        course.destroy();
+      })
+      
     return res.json({ msg: "Success course deleted" });
   }
 }
