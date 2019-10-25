@@ -5,7 +5,7 @@ class CourseController {
   async index(req, res) {
     const course = req.course;
     // TODO GET MATTERS FROM COURSE
-    const matters = await Coursematter.findAll({ where: { idquestion: req.params.idquestion } })
+    //const matters = await Coursematter.findAll({ where: { idquestion: req.params.idquestion } })
 
     return res.json(course);
   }

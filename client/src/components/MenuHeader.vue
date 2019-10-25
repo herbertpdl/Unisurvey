@@ -27,7 +27,7 @@
               <!-- Courses -->
               <b-navbar-dropdown label="Cursos">
                 <b-navbar-item tag="router-link" to="/register-course">Cadastrar</b-navbar-item>
-                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="/courses-list">Listar</b-navbar-item>
               </b-navbar-dropdown>
 
               <!-- Matters -->
