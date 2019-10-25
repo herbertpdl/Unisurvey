@@ -5,8 +5,7 @@ class CourseController {
   async index(req, res) {
     const course = req.course;
     // TODO GET MATTERS FROM COURSE
-    const matters = await Coursematter.findAll({ where: { idquestion: req.params.idquestion } })
-
+    
     return res.json(course);
   }
 
@@ -32,8 +31,8 @@ class CourseController {
       
       req.body.matters.map((el, index) => {
         matters[index] = {
-          idcourse: course.id,
-          iddiscipline: el.id,
+          course_id: course.id,
+          matter_id: el.id,
         }
       })
 

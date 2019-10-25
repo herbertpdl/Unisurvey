@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Coursematter', {
-      idcourse: {
+      course_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -13,7 +13,7 @@ module.exports = {
         },
         allowNull: false
       },
-      iddiscipline: {
+      matter_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {

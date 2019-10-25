@@ -107,6 +107,7 @@ export default {
 
     getCourse(this.$route.params.id)
       .then(resp => {
+        console.log(resp)
         this.courseData = resp
         this.$store.commit('loading', false)  
       })
