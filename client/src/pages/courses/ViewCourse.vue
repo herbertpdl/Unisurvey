@@ -60,6 +60,31 @@
                 </b-field>
               </div>
             </div>
+            <div class="columns">
+              <div class=" column is-6">
+                <b-field label="Disciplinas">
+                  <multiselect
+                    v-model="courseData.Matter"
+                    :options="courseData.Matter"
+                    :multiple="true"
+                    :close-on-select="false"
+                    :max="6"
+                    :disabled="!edit"
+                    searchable
+                    track-by="name"
+                    label="name"
+                    placeholder="Selecione as disciplinas"
+                    selectLabel="Selecionar"
+                    selectedLabel="Selecionado"
+                    deselectLabel="Remover"
+                  >
+                    <template slot="maxElements">
+                      Você pode selecionar no máximo 6 disciplinas.
+                    </template>
+                  </multiselect>
+                </b-field>
+              </div>
+            </div>
 
             <div class="align-buttons--right">
               <div class="buttons">
@@ -107,7 +132,6 @@ export default {
 
     getCourse(this.$route.params.id)
       .then(resp => {
-        console.log(resp)
         this.courseData = resp
         this.$store.commit('loading', false)  
       })

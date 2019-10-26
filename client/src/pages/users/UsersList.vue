@@ -11,7 +11,10 @@
               <option value="50">50 por página</option>
           </b-select>
           <div class="align-buttons--right">
-            <b-button type="is-primary">
+            <b-button type="is-primary"
+              tag="router-link"
+              :to="`register-user`"
+            >
               Novo
             </b-button>
           </div>
