@@ -8,6 +8,7 @@ const UserMiddleware = require("./app/middlewares/User");
 const MatterMiddleware = require("./app/middlewares/Matter");
 const QuestionMiddleware = require("./app/middlewares/Question");
 const CourseMiddleware = require("./app/middlewares/Course");
+const SurveyMiddleware = require("./app/middlewares/Survey");
 
 
 // controllers
@@ -17,6 +18,7 @@ const QuestionController = require("./app/controllers/QuestionController");
 const AlternativeController = require("./app/controllers/AlternativeController");
 const MatterController = require("./app/controllers/MatterController");
 const CourseController = require("./app/controllers/CourseController");
+const SurveyController = require("./app/controllers/SurveyController");
 
 
 // routes - public
@@ -101,12 +103,44 @@ routes.delete(
 );
 
 //courses
-routes.get("/course/:id", AuthMiddleware, CourseMiddleware, CourseController.index)
+routes.get(
+  "/course/:id",
+  AuthMiddleware,
+  CourseMiddleware,
+  CourseController.index
+)
 
 routes.post("/course", AuthMiddleware, CourseController.store);
 
-routes.get("/courses", AuthMiddleware, CourseController.getAll)
+routes.get(
+  "/courses",
+  AuthMiddleware,
+  CourseController.getAll
+)
 
-routes.delete("/course/:id", AuthMiddleware, CourseMiddleware, CourseController.delete);
+routes.put(
+  "/course/:id",
+  AuthMiddleware,
+  CourseMiddleware,
+  CourseController.update
+)
+
+routes.delete(
+  "/course/:id",
+  AuthMiddleware,
+  CourseMiddleware,
+  CourseController.delete
+);
+
+//surveys
+
+routes.post("/survey", AuthMiddleware, SurveyController.store);
+
+routes.get(
+  "/survey/:id",
+  AuthMiddleware, 
+  SurveyMiddleware,
+  SurveyController.index
+);
 
 module.exports = routes;

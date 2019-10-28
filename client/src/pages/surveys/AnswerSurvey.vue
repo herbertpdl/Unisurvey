@@ -3,31 +3,31 @@
     <div class="container">
       <div class="columns">
         <div class="column is-12">
-          <h1 class="title">Responder questionário XXXXXX</h1>
+          <h1 class="title"></h1>
 
           <div class="progress-container margin-bottom-1">
             <b-progress
+              v-if="surveyData.questions && surveyData.questions.length"
               :value="totalPercent"
               size="is-medium"
               type="is-dar-grey"
               show-value
             >
-              Progresso {{ answeredQuestions.length }} / {{ totalQuestions }}
+              Progresso {{ answeredQuestions.length }} / {{ surveyData.questions.length }}
             </b-progress>
           </div>
           <card>
             <div
-              v-for="(question, index) in surveyQuestions"
+              v-for="(question, index) in surveyData.questions"
               :key="index"
               class="columns"
             >
               <div class="column is-6">
                 <b-field :label="`${index+1}) ${question.statement}`">
-                  <!-- Discursive question -->
+                  <!-- Discursive question --> 
                   <b-input
                     v-if="question.type === 'discursive'"
                     v-model="answers[index]"
-
                   />
 
                   <!-- Single answer question -->
@@ -38,7 +38,7 @@
                       class="field"
                     >
                       <b-radio v-model="answers[index]" :native-value="alternative">
-                        {{ alternative }}
+                        {{ alternative.description }}
                       </b-radio>
                     </div>
                   </div>
@@ -47,7 +47,7 @@
                   <div v-else>
                     <div
                       v-for="(alternative, indexAlternative) in question.alternatives"
-                      :key="indexAlternative"
+                      :key="indexAlternative" 
                       class="field"
                     >
                       <b-checkbox
@@ -56,7 +56,7 @@
                         :native-value="alternative"
                         :name="`question${index}`"
                       >
-                        {{ alternative }}
+                        {{ alternative.description }}
                       </b-checkbox>
                     </div>
                   </div>
@@ -68,7 +68,6 @@
               <div class="buttons">
               </div>
             </div>
-            {{ answers }}
           </card>
         </div>
       </div>
@@ -77,7 +76,7 @@
 </template>
 
 <script>
-import { getQuestions } from '@/services/api'
+import { getSurvey, getAlternativesByQuestion } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -89,7 +88,7 @@ export default {
   data() {
     return {
       answers: [],
-      surveyQuestions: [],
+      surveyData: [],
       totalQuestions: null,
       answeredQuestions: [],
       tempAnswers: [],
@@ -104,22 +103,33 @@ export default {
   },
   mounted() {
     this.$store.commit('loading', true)
-    getQuestions()
+    getSurvey(2)
       .then(resp => {
-        this.surveyQuestions = resp;
-        this.totalQuestions = resp.length
-        this.$store.commit('loading', false)
+        this.surveyData = resp
+        this.appendAlternatives()
       })
   },
   methods: {
     addMultiple(index) {
       this.answers[index] !== undefined ? this.answers[index].push(this.tempAnswers[0]) : this.answers[index] = this.tempAnswers
       this.tempAnswers = []
+    },
+    appendAlternatives() {
+      this.surveyData.questions.map((el, index) => {
+        if(el.type === 'multiple') {
+          getAlternativesByQuestion(el.id)
+            .then(resp => {
+              this.surveyData.questions[index].alternatives = resp
+            })
+        }
+      })
+      console.log(this.surveyData)
+      this.$store.commit('loading', false)
     }
   },
   computed: {
     totalPercent() {
-      const number = (this.answeredQuestions.length/this.totalQuestions) * 100
+      const number = (this.answeredQuestions.length/this.surveyData.questions.length) * 100
       return number
     }
   },

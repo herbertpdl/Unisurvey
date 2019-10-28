@@ -64,8 +64,9 @@
               <div class=" column is-6">
                 <b-field label="Disciplinas">
                   <multiselect
+                    v-if="mattersList"
                     v-model="courseData.Matter"
-                    :options="courseData.Matter"
+                    :options="mattersList"
                     :multiple="true"
                     :close-on-select="false"
                     :max="6"
@@ -108,7 +109,7 @@
 </template>
 
 <script>
-import { getCourse } from '@/services/api'
+import { getCourse, getMatters, updateCourse } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -123,8 +124,7 @@ export default {
       edit: false,
       isSuccessActive: false,
       isErrorActive: false,
-      description: null,
-      alternatives: null,
+      mattersList: null,
     }
   },
   mounted() {
@@ -136,6 +136,12 @@ export default {
         this.$store.commit('loading', false)  
       })
 
+    getMatters()
+        .then(resp => {
+          this.mattersList = resp
+          this.$store.commit('loading', false)
+        })
+
     if (this.$route.params.viewtype === 'edit') {
       this.enableEdit()
     }
@@ -146,22 +152,22 @@ export default {
     },
     save() {
       this.$store.commit('loading', true)
-    },
-    empty() {
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: `Você não pode adicionar uma alternativa vazia`,
-        position: 'is-bottom',
-        type: 'is-danger'
-      })
-    },
-    maximum() {
-      this.$buefy.toast.open({
-        duration: 3000,
-        message: `Você pode adicionar no máximo 5 alternativas`,
-        position: 'is-bottom',
-        type: 'is-warning'
-      })
+      updateCourse(
+        this.courseData.id,
+        {
+          name: this.courseData.name,
+          period: this.courseData.period,
+          matters: this.courseData.Matter,
+        }
+      )
+        .then(resp => {
+          this.$store.commit('loading', false)
+          this.isSuccessActive = true
+        })
+        .catch(err => {
+          this.$store.commit('loading', false)
+          this.isErrorActive = true
+        })
     }
   }
 }

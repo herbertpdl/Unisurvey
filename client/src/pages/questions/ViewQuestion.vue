@@ -158,7 +158,7 @@ export default {
     getQuestion(this.$route.params.id)
       .then(resp => {
         this.questionData = resp
-        this.$store.commit('loading', false)  
+        this.$store.commit('loading', false)
       })
 
     getAlternativesByQuestion(this.$route.params.id)

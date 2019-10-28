@@ -4,7 +4,6 @@ const { Coursematter } = require("../models");
 class CourseController {
   async index(req, res) {
     const course = req.course;
-    // TODO GET MATTERS FROM COURSE
     
     return res.json(course);
   }
@@ -51,14 +50,26 @@ class CourseController {
   async update(req, res) {
     const course = req.course;
 
-    const param = {
+    const courseBody = {
       name: req.body.name,
-      teacher_id: req.body.teacher_id,
-      teacher_name: req.body.teacher_name,
-    };
+      period: req.body.period,
+      Matter: req.body.matters
+    }
 
+    await Coursematter.destroy ({where: {course_id: course.id} })
 
-    course.update(param);
+    const matters = [];
+    
+    req.body.matters.map((el, index) => {
+      matters[index] = {
+        course_id: course.id,
+        matter_id: el.id,
+      }
+    })
+
+    Coursematter.bulkCreate(matters);
+
+    course.update(courseBody);
 
     return res.json({
       course
@@ -70,7 +81,7 @@ class CourseController {
 
     course.destroy();
 
-    await Coursematter.destroy ({where: {idcourse: course.id} })
+    await Coursematter.destroy ({where: {course_id: course.id} })
       .then (() => {
         course.destroy();
       })

@@ -7,6 +7,13 @@
           <card>
             <div class="columns">
               <div class="column is-6">
+                <b-field label="Nome do Questionário">
+                    <b-input v-model="name" placeholder="Ex: Avaliação institucional 2019/2" />
+                </b-field>
+              </div>
+            </div>
+            <div class="columns">
+              <div class="column is-6">
                 <b-field label="Tipo de questionário">
                   <b-select
                     expanded
@@ -49,7 +56,7 @@
               </div>
             </div>
             <div class="align-buttons--right">
-              <b-button type="is-primary">
+              <b-button type="is-primary" @click="save">
                 Enviar
               </b-button>
             </div>
@@ -61,7 +68,7 @@
 </template>
 
 <script>
-import { getQuestions } from '@/services/api'
+import { getQuestions, registerSurvey } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -72,6 +79,7 @@ export default {
   },
   data() {
     return {
+      name: null,
       surveyType: null,
       selectedQuestions: [],
       questionsList: [],
@@ -90,7 +98,24 @@ export default {
         this.questionsList = resp
         this.$store.commit('loading', false)
       })
-  }
+  },
+  methods: {
+    save() {
+      this.$store.commit('loading', true)
+      registerSurvey({
+        name: this.name,
+        type: this.surveyType,
+        questions: this.selectedQuestions,
+      }).then(resp => {
+        console.log(resp)
+        this.$store.commit('loading', false)
+      })
+      .catch(err => {
+        console.log(err)
+        this.$store.commit('loading', false)
+      })
+    }
+  },
 }
 </script>
 

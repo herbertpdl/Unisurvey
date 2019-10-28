@@ -47,6 +47,9 @@ export function deleteCourse(id) {
   return HTTP_TOKEN.delete(`course/${id}`).then(resp => resp.data)
 }
 
+export function updateCourse(id, data) {
+  return HTTP_TOKEN.put(`course/${id}`, data). then(resp => resp.data)
+}
 
 // MATTERS
 export function getMatters() {
@@ -93,4 +96,13 @@ export function updateQuestion(id, data) {
 // ALTERNATIVES
 export function getAlternativesByQuestion(id) {
   return HTTP_TOKEN.get(`alternatives/${id}`).then(resp => resp.data)
+}
+
+// SURVEYS
+export function registerSurvey(data) {
+  return HTTP_TOKEN.post(`survey`, data).then(resp => resp.data)
+}
+
+export function getSurvey(id) {
+  return HTTP_TOKEN.get(`survey/${id}`).then(resp => resp.data)
 }

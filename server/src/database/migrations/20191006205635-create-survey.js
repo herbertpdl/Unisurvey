@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Quiz',{
+    return queryInterface.createTable('Survey',{
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -14,10 +14,6 @@ module.exports = {
         type: Sequelize.STRING(50)
       },
       type: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      teacher: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
