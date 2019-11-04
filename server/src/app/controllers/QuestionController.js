@@ -1,5 +1,6 @@
 const { Question } = require("../models");
 const { Questionalternative } = require("../models");
+const { Alternative } = require("../models");
 
 class QuestionController {
   async index(req, res) {
@@ -21,19 +22,27 @@ class QuestionController {
       let questionBody = {
         statement: req.body.statement,
         type: req.body.type,
-        checkMultiple: req.body.checkMultiple
+        allow_multiple: req.body.checkMultiple ? 1 : 0,
       }
 
+      console.log(questionBody)
+
       let question;
+      let alternatives;
+      let questionAlternative = []
 
       question = await Question.create({ ...questionBody });
 
+      console.log(question)
+
       if (req.body.type == 'multiple') {
-        req.body.alternatives.map(el => {
-          Object.assign(el, {idquestion: question.id})
+        alternatives = await Alternative.bulkCreate(req.body.alternatives );
+
+        alternatives.map(el => {
+          questionAlternative.push({question_id: question.id, alternative_id: el.id})
         })
 
-        await Questionalternative.bulkCreate(req.body.alternatives );
+        Questionalternative.bulkCreate(questionAlternative)
       }
 
       return res.json(
@@ -56,11 +65,11 @@ class QuestionController {
       checkMultiple: req.body.checkMultiple
     };
 
-    await Questionalternative.destroy({ where: { idquestion: question.id } })
+    await Questionalternative.destroy({ where: { question_id: question.id } })
 
     if(questionBody.type === 'multiple') {
       req.body.alternatives.map(el => {
-        Object.assign(el, {idquestion: question.id})
+        Object.assign(el, {question_id: question.id})
       })
       await Questionalternative.bulkCreate(req.body.alternatives );
     }
@@ -75,7 +84,7 @@ class QuestionController {
   async delete(req, res) {
     const question = req.question;
 
-    await Questionalternative.destroy({ where: { idquestion: question.id} })
+    await Questionalternative.destroy({ where: { question_id: question.id} })
       .then(() => {
         question.destroy();
       })

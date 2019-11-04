@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import { getQuestion, updateQuestion, getAlternativesByQuestion } from '@/services/api'
+import { getQuestion, updateQuestion } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -159,11 +159,6 @@ export default {
       .then(resp => {
         this.questionData = resp
         this.$store.commit('loading', false)
-      })
-
-    getAlternativesByQuestion(this.$route.params.id)
-      .then(resp => {
-        this.alternatives = resp
       })
 
     if (this.$route.params.viewtype === 'edit') {

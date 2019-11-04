@@ -1,7 +1,8 @@
 const { Question } = require("../models");
 
 module.exports = async (req, res, next) => {
-  const question = await Question.findOne({ where: { id: req.params.id } });
+  const question = await Question.findOne({ where: { id: req.params.id }, include:
+  ['alternatives']});
   if (question) {
     req.question = question;
 

@@ -6,15 +6,19 @@ module.exports = (sequelize, DataType) => {
     {      
       statement: DataType.STRING,
       type: DataType.STRING,
-      allowMultiple: DataType.BOOLEAN,
+      allow_multiple: DataType.BOOLEAN,
     },
     {
-      tableName: "Question",
-    },
+      freezeTableName: true
+    }
   );
 
   Question.associate = function (models) {
     Question.belongsToMany(models.Survey, {through: 'Surveyquestion', as: 'survey'})
+  }
+
+  Question.associate = function (models) {
+    Question.belongsToMany(models.Alternative, {through: 'Questionalternative', as: 'alternatives'})
   }
 
   return Question;

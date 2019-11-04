@@ -3,9 +3,8 @@
     <div class="container">
       <div class="columns">
         <div class="column is-12">
-          <h1 class="title"></h1>
 
-          <div class="progress-container margin-bottom-1">
+          <!--<div class="progress-container margin-bottom-1">
             <b-progress
               v-if="surveyData.questions && surveyData.questions.length"
               :value="totalPercent"
@@ -15,7 +14,8 @@
             >
               Progresso {{ answeredQuestions.length }} / {{ surveyData.questions.length }}
             </b-progress>
-          </div>
+          </div> -->
+          <h1 class="title">{{ surveyData.name }}</h1>
           <card>
             <div
               v-for="(question, index) in surveyData.questions"
@@ -31,13 +31,13 @@
                   />
 
                   <!-- Single answer question -->
-                  <div v-else-if="question.type === 'multiple' && !question.checkMultiple">
+                  <div v-else-if="question.type === 'multiple' && !question.allow_multiple">
                     <div
                       v-for="(alternative, indexAlternative) in question.alternatives"
                       :key="indexAlternative"
                       class="field"
                     >
-                      <b-radio v-model="answers[index]" :native-value="alternative">
+                      <b-radio v-model="answers[index]" :native-value="alternative.description">
                         {{ alternative.description }}
                       </b-radio>
                     </div>
@@ -53,7 +53,7 @@
                       <b-checkbox
                         v-model="tempAnswers"
                         @input="addMultiple(index)"
-                        :native-value="alternative"
+                        :native-value="alternative.description"
                         :name="`question${index}`"
                       >
                         {{ alternative.description }}
@@ -64,9 +64,10 @@
                 <hr>
               </div>
             </div>
-            <div class="align-buttons--right">
-              <div class="buttons">
-              </div>
+            <div class="align-buttons--center">
+              <b-button type="is-primary" @click="linkQuestions">
+                Enviar
+              </b-button>
             </div>
           </card>
         </div>
@@ -76,7 +77,7 @@
 </template>
 
 <script>
-import { getSurvey, getAlternativesByQuestion } from '@/services/api'
+import { getSurvey, saveSurveyAnswers } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -92,6 +93,7 @@ export default {
       totalQuestions: null,
       answeredQuestions: [],
       tempAnswers: [],
+      answersQuestions: [],
     }
   },
   watch: {
@@ -103,28 +105,39 @@ export default {
   },
   mounted() {
     this.$store.commit('loading', true)
-    getSurvey(2)
+    getSurvey(1)
       .then(resp => {
         this.surveyData = resp
-        this.appendAlternatives()
+        this.$store.commit('loading', false)
       })
   },
   methods: {
     addMultiple(index) {
-      this.answers[index] !== undefined ? this.answers[index].push(this.tempAnswers[0]) : this.answers[index] = this.tempAnswers
-      this.tempAnswers = []
+      this.answers[index] = [...this.tempAnswers]
     },
-    appendAlternatives() {
-      this.surveyData.questions.map((el, index) => {
-        if(el.type === 'multiple') {
-          getAlternativesByQuestion(el.id)
-            .then(resp => {
-              this.surveyData.questions[index].alternatives = resp
-            })
-        }
+    linkQuestions() {
+      this.answers.map((el, index) => {
+        this.answersQuestions[index] = {
+            answer: el,
+            question_id: this.surveyData.questions[index].id
+          }
       })
-      console.log(this.surveyData)
-      this.$store.commit('loading', false)
+
+      this.save()
+    },
+    save() {
+      this.$store.commit('loading', true)
+      saveSurveyAnswers({
+        survey_id: this.surveyData.id,
+        answers: this.answersQuestions
+      })
+        .then(resp => {
+          this.$store.commit('loading', false)
+        })
+        .catch(err => {
+          console.log(err)
+          this.$store.commit('loading', false)
+        })
     }
   },
   computed: {

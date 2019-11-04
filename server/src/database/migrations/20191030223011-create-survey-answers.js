@@ -2,12 +2,12 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Questionalternative', {
-      alternative_id: {
+    return queryInterface.createTable('Surveyanswers',{
+      survey_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {
-            tableName: 'Alternative',
+            tableName: 'Survey',
           },
           key: 'id'
         },
@@ -23,6 +23,10 @@ module.exports = {
         },
         allowNull: false
       },
+      answer: {
+        allowNull: false,
+        type: Sequelize.STRING(50)
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE
@@ -31,10 +35,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Questionalternative');
+    return queryInterface.dropTable('Surveyanswers');
   }
 };

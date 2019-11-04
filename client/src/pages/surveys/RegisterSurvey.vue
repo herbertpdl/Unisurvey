@@ -107,7 +107,6 @@ export default {
         type: this.surveyType,
         questions: this.selectedQuestions,
       }).then(resp => {
-        console.log(resp)
         this.$store.commit('loading', false)
       })
       .catch(err => {

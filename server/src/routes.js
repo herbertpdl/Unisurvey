@@ -143,4 +143,10 @@ routes.get(
   SurveyController.index
 );
 
+routes.get("/surveys/:type", AuthMiddleware, SurveyController.getByType);
+
+routes.post("/survey-answer", AuthMiddleware, SurveyController.saveAnswers);
+
+routes.get("/survey-answer/:idsurvey/:idquestion", AuthMiddleware, SurveyController.getAnswerBySurveyQuestion);
+
 module.exports = routes;

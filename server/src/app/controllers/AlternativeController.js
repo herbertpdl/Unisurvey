@@ -8,7 +8,7 @@ class QuestionController {
   }
 
   async getByQuestion(req, res) {
-    const questionAlternatives = await Questionalternative.findAll({ where: { idquestion: req.params.idquestion } })
+    const questionAlternatives = await Questionalternative.findAll({ where: { question_id: req.params.idquestion } })
 
     return res.json(questionAlternatives)
   }

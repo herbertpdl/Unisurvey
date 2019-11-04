@@ -36,7 +36,7 @@
                 <b-navbar-item tag="router-link" to="/matters-list">Listar</b-navbar-item>
               </b-navbar-dropdown>
 
-              <b-navbar-item tag="router-link" to="">Relatório</b-navbar-item>
+              <b-navbar-item tag="router-link" to="/get-report">Relatório</b-navbar-item>
             </template>
 
             <template slot="end">

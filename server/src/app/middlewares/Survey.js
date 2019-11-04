@@ -2,7 +2,7 @@ const { Survey } = require("../models")
 
 module.exports = async(req, res, next) => {
   const survey = await Survey.findOne({ where: { id: req.params.id}, include:
-    ['questions']});
+    [{ all: true, nested: true }]});
   if(survey) {
     req.survey = survey;
 

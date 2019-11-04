@@ -106,3 +106,15 @@ export function registerSurvey(data) {
 export function getSurvey(id) {
   return HTTP_TOKEN.get(`survey/${id}`).then(resp => resp.data)
 }
+
+export function getSurveysByType(type) {
+  return HTTP_TOKEN.get(`surveys/${type}`).then(resp => resp.data)
+}
+
+export function saveSurveyAnswers(data) {
+  return HTTP_TOKEN.post(`survey-answer`, data).then(resp => resp.data)
+}
+
+export function getAnswersBySurveyQuestion(idSurvey, idQuestion) {
+  return HTTP_TOKEN.get(`survey-answer/${idSurvey}/${idQuestion}`).then(resp => resp.data)
+}

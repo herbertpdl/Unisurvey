@@ -1,18 +1,19 @@
 const Sequelize = require("sequelize");
 
 module.exports = (sequelize, DataType) => {
-    const Questionalternative = sequelize.define(
-      "Questionalternative",
+    const Surveyanswers = sequelize.define(
+      "Surveyanswers",
       {        
-        alternative_id: DataType.INTEGER,
+        survey_id: DataType.INTEGER,
         question_id: DataType.INTEGER,
+        answer: DataType.STRING,
       },
       {
         freezeTableName: true
       }
     );
 
-    Questionalternative.removeAttribute('id');
+    Surveyanswers.removeAttribute('id');
 
-    return Questionalternative;
+    return Surveyanswers;
   };
