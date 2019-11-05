@@ -59,9 +59,15 @@
                   </b-field>
                 </div>
               </div>
-              <p v-if="selectedQuestion"><strong>{{ selectedQuestion.statement }}</strong></p>
 
-              {{average}}
+              <p class="margin-bottom-1"><strong>Respostas:</strong></p>
+              <div v-if="selectedQuestion">
+                <p v-for="(answer, index) in answerCounter" v-bind:key="index">
+                  <strong>{{ answer.description }}</strong>: {{ answer.count }}
+                </p>
+              </div>
+
+              <p class="margin-bottom-1"><strong>Nota média</strong></p>
               <bar-chart v-if="chartdata !== null" :chart-data="chartdata" :options="options"/>
             </card>
           </transition>
@@ -121,6 +127,7 @@ export default {
       }
 
       console.log(sum)
+      console.log(this.answerCounter)
 
       return sum
     }
@@ -154,26 +161,70 @@ export default {
       getAnswersBySurveyQuestion(this.selectedSurvey.id, this.selectedQuestion.id)
         .then(resp => {
           this.$store.commit('loading', false)
-          //count how many times the value appers
+          // count how many times the value appers
           let alternatives = []
-          this.selectedQuestion.alternatives.map(el => {
-            let counter = this.getOccurrence(resp, el.description)
-            alternatives.push({
-              description: el.description,
-              count: counter,
+
+          // get occurrence in multiple choice(single answer) question
+          if (this.selectedQuestion.type === 'multiple' && !this.selectedQuestion.allow_multiple) {
+            this.selectedQuestion.alternatives.map(el => {
+              let counter = this.getOccurrence(resp, el.description)
+              alternatives.push({
+                description: el.description,
+                count: counter,
+              })
             })
-          })
+            this.answerCounter = alternatives;
+
+            this.updateChart(alternatives)
+          } else if (this.selectedQuestion.type === 'multiple' && this.selectedQuestion.allow_multiple) {
+            // get occurrence in multiple choice(multiple answer) question
+
+            let alternativesMultiple = {}
+            console.log(resp)
+            resp.map(el => {
+              this.selectedQuestion.alternatives.map(alternative => {
+                if (alternativesMultiple[alternative.description] == undefined) {
+                  alternativesMultiple[alternative.description] = 0
+                }
+
+                if (el.answer.includes(alternative.description)) {
+                  alternativesMultiple[alternative.description] += 1 
+                }
+              })
+            })
+
+            // transform answers object in array
+            alternativesMultiple = Object.keys(alternativesMultiple).map(el => {
+              return  {
+                description: el,
+                count: alternativesMultiple[el]
+              }
+            })
+
+            this.answerCounter = alternativesMultiple
+
+            this.updateChart(alternativesMultiple)
+
+            console.log(alternativesMultiple)
+          }
           
-          this.answerCounter = alternatives;
-          this.updateChart(alternatives)
         })
         .catch(e => {
           console.log(e)
           this.$store.commit('loading', false)
         })
     },
-    getOccurrence(array, value) {
-      return array.filter((v) => (v.answer === value)).length;
+    getOccurrence(array, value, multiple) {
+      console.log(value)
+      let total
+
+      if (multiple) {
+        total = array.filter((v) => (v === value)).length;
+      } else {
+        total = array.filter((v) => (v.answer === value)).length;
+      }
+
+      return total
     },
     updateChart(values) {
       let datasets = []
