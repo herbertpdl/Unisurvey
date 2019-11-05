@@ -61,14 +61,36 @@
               </div>
 
               <p class="margin-bottom-1"><strong>Respostas:</strong></p>
-              <div v-if="selectedQuestion">
+              <div v-if="selectedQuestion && showChart">
                 <p v-for="(answer, index) in answerCounter" v-bind:key="index">
-                  <strong>{{ answer.description }}</strong>: {{ answer.count }}
+                  <strong>{{ answer.description }}</strong>: {{ answer.count }} - {{ percentage(answer.count, answerCounter.length) }}
                 </p>
               </div>
+              <!-- Chart data -->
+              <bar-chart v-if="chartdata !== null && showChart" :chart-data="chartdata" :options="options"/>
 
-              <p class="margin-bottom-1"><strong>Nota média</strong></p>
-              <bar-chart v-if="chartdata !== null" :chart-data="chartdata" :options="options"/>
+              <!-- Discursive answers -->
+              <div v-if="discursiveAnswers.length !== 0 && showDiscursive">
+                <b-select v-model="perPage">
+                    <option value="10">10 por página</option>
+                    <option value="15">15 por página</option>
+                    <option value="25">25 por página</option>
+                    <option value="50">50 por página</option>
+                </b-select>
+                <b-table
+                  :data="discursiveAnswers"
+                  :per-page="perPage"
+                  paginated
+                  striped
+                  hoverable
+                >
+                  <template slot-scope="props">
+                    <b-table-column>
+                      {{ props.row.answer }}
+                    </b-table-column>
+                  </template>
+                </b-table>
+              </div>
             </card>
           </transition>
         </div>
@@ -115,29 +137,20 @@ export default {
         }
       },
       answerCounter: null,
-    }
-  },
-  computed: {
-    average() {
-      let sum = []
-      const reducer = (accumulator, currentValue) => accumulator + currentValue.count;
-
-      if (this.answerCounter !== null) {
-        sum = this.answerCounter.reduce(reducer)
-      }
-
-      console.log(sum)
-      console.log(this.answerCounter)
-
-      return sum
+      discursiveAnswers: [],
+      showDiscursive: false,
+      showChart: false,
+      perPage: 10,
     }
   },
   methods: {
+    percentage(val, total) {
+      return ((val * 100) / total)
+    },
     getSurveys(e) {
       this.$store.commit('loading', true)
       getSurveysByType(e)
         .then(resp => {
-          console.log(resp)
           this.surveyList = resp
           this.$store.commit('loading', false)
         })
@@ -148,11 +161,9 @@ export default {
     },
     setSelectedSurvey(event) {
       this.selectedSurvey = this.surveyList[event.target.value]
-      console.log(this.selectedSurvey)
     },
     setSelectedQuestion(event) {
       this.selectedQuestion = this.selectedSurvey.questions[event.target.value]
-      console.log(this.selectedQuestion)
 
       this.getAnswers()
     },
@@ -176,11 +187,12 @@ export default {
             this.answerCounter = alternatives;
 
             this.updateChart(alternatives)
+            this.showChart = true
+            this.showDiscursive = false
           } else if (this.selectedQuestion.type === 'multiple' && this.selectedQuestion.allow_multiple) {
             // get occurrence in multiple choice(multiple answer) question
 
             let alternativesMultiple = {}
-            console.log(resp)
             resp.map(el => {
               this.selectedQuestion.alternatives.map(alternative => {
                 if (alternativesMultiple[alternative.description] == undefined) {
@@ -202,10 +214,15 @@ export default {
             })
 
             this.answerCounter = alternativesMultiple
-
             this.updateChart(alternativesMultiple)
+            this.showChart = true
+            this.showDiscursive = false
+          } else {
+            // discursive question answers
 
-            console.log(alternativesMultiple)
+            this.discursiveAnswers = resp
+            this.showChart = false
+            this.showDiscursive = true
           }
           
         })
@@ -215,7 +232,6 @@ export default {
         })
     },
     getOccurrence(array, value, multiple) {
-      console.log(value)
       let total
 
       if (multiple) {
