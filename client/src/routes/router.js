@@ -41,7 +41,8 @@ let router = new Router({
       name: 'home',
       componen: Home,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: ['admin', 'aluno', 'professor', 'funcionario'],
       }
     },
     {
@@ -49,7 +50,8 @@ let router = new Router({
       name: 'register-user',
       component: RegisterUser,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -57,7 +59,8 @@ let router = new Router({
       name: 'view-user',
       component: ViewUser,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -65,7 +68,8 @@ let router = new Router({
       name: 'user-list',
       component: UsersList,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -73,7 +77,8 @@ let router = new Router({
       name: 'register-matter',
       component: RegisterMatter,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -81,7 +86,8 @@ let router = new Router({
       name: 'view-matter',
       component: ViewMatter,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -89,7 +95,8 @@ let router = new Router({
       name: 'matters-list',
       component: MattersList,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -97,7 +104,8 @@ let router = new Router({
       name: 'register-course',
       component: RegisterCourse,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -105,7 +113,8 @@ let router = new Router({
       name: 'view-course',
       component: ViewCourse,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -113,7 +122,8 @@ let router = new Router({
       name: 'courses-list',
       component: CoursesList,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },  
     {
@@ -121,7 +131,8 @@ let router = new Router({
       name: 'register-question',
       component: RegisterQuestion,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -129,7 +140,8 @@ let router = new Router({
       name: 'question-list',
       component: QuestionList,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -137,7 +149,8 @@ let router = new Router({
       name: 'view-question',
       component: ViewQuestion,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -145,7 +158,8 @@ let router = new Router({
       name: 'register-survey',
       component: RegisterSurvey,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
     {
@@ -153,7 +167,8 @@ let router = new Router({
       name: 'answer-survey',
       component: AnswerSurvey,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: ['aluno', 'professor', 'funcionario'],
       }
     },
     {
@@ -161,19 +176,27 @@ let router = new Router({
       name: 'get-report',
       component: GetReport,
       meta: {
-        requiresAuth: true
+        requiresAuth: true,
+        authorize: 'admin',
       }
     },
   ]
 })
 
 router.beforeEach((to, from, next) => {
+  const { authorize } = to.meta
+  let currentUserType
+
+  if(store.state.user !== null) {
+    currentUserType = store.state.user.type
+  }
+
   if(to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) {
+    if (store.getters.isLoggedIn && authorize.includes(currentUserType)) {
       next()
       return
     }
-    next('/') 
+    next('/home') 
   } else {
     next() 
   }

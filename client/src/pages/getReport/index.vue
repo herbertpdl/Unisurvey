@@ -143,6 +143,9 @@ export default {
       perPage: 10,
     }
   },
+  mounted() {
+    console.log(this.$store)
+  },
   methods: {
     percentage(val, total) {
       return ((val * 100) / total)

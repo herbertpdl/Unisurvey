@@ -24,9 +24,9 @@ export default new Vuex.Store({
     loading(state, status) {
       state.loading = status;
     },
-    auth_success(state, token, user) {
-      state.user =  user
-      state.token = token
+    auth_success(state, data) {
+      state.user = data.user
+      state.token = data.token
     },
     logout(state){
       state.status = ''
@@ -42,7 +42,7 @@ export default new Vuex.Store({
             const user = resp.user
             localStorage.setItem('token', token)
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-            commit('auth_success', token, user)
+            commit('auth_success', resp)
             resolve(resp)
           })
           .catch(err => {
