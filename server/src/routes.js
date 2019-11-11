@@ -132,6 +132,13 @@ routes.delete(
   CourseController.delete
 );
 
+routes.get(
+  "/course-teachers/:id",
+  AuthMiddleware,
+  CourseMiddleware,
+  CourseController.getSurveysByCourse
+);
+
 //surveys
 
 routes.post("/survey", AuthMiddleware, SurveyController.store);

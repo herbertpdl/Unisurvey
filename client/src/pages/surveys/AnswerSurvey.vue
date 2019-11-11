@@ -105,7 +105,7 @@ export default {
   },
   mounted() {
     this.$store.commit('loading', true)
-    getSurvey(1)
+    getSurvey(this.$route.params.idsurvey)
       .then(resp => {
         this.surveyData = resp
         this.$store.commit('loading', false)

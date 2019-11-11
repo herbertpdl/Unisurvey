@@ -89,7 +89,7 @@
                       <option
                         v-for="(course, index) in courses"
                         v-bind:key="index"
-                        v-bind:value="index"
+                        v-bind:value="course.id"
                       >
                         {{ course.name }}
                       </option>

@@ -13,6 +13,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(50)
       },
+      code: {
+        allowNull: false,
+        type: Sequelize.INTEGER
+      },
       teacher_id: {
         allowNull: false,
         type: Sequelize.INTEGER,

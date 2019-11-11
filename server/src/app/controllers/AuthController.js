@@ -26,6 +26,7 @@ class AuthController {
         name: user.name,
         email: user.email,
         type: user.type,
+        course: user.course
       },
       token: user.createToken()
     });

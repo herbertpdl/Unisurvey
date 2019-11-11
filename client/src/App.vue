@@ -25,8 +25,8 @@ export default {
       this.$route.path === '/' ? show = false : show =  true
 
       return show
-    }
-  }
+    },
+  },
 };
 </script>
 

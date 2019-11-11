@@ -36,6 +36,7 @@ class MatterController {
 
     const param = {
       name: req.body.name,
+      code: req.body.code,
       teacher_id: req.body.teacher_id,
       teacher_name: req.body.teacher_name,
     };

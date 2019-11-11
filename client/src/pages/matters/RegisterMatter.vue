@@ -56,6 +56,13 @@
               </div>
             </div>
             <div class="columns">
+              <div class="column is-2">
+                <b-field label="Código da disciplina">
+                    <b-input v-model="code" placeholder="Ex: 5751" />
+                </b-field>
+              </div>
+            </div>
+            <div class="columns">
               <div class="column is-6">
                 <b-field label="Professor responsável">
                   <b-select v-model="teacher" placeholder="Selecione" expanded>
@@ -101,6 +108,7 @@ export default {
   data() {
     return {
       name: null,
+      code: null, 
       teachers: [],
       teacher: null,
       hasTeachers: true,
@@ -127,6 +135,7 @@ export default {
         .then(resp => {
           saveMatter({
             name: this.name,
+            code: this.code,
             teacher_id: this.teacher,
             teacher_name: resp.name,
           })

@@ -1,6 +1,7 @@
 const { Survey } = require("../models");
 const { Surveyquestion } = require("../models");
 const { Surveyanswers } = require("../models");
+const { User } = require("../models");
 
 class SurveyController {
   async index(req, res) {
@@ -16,23 +17,53 @@ class SurveyController {
         type: req.body.type,
       }
 
-      const survey = await Survey.create({ ...surveyBody });
-
+      let teachers = []
+      let teachersSurveys = []
+      let survey
       const questions = [];
 
-      req.body.questions.map((el, index) => {
-        questions[index] = {
-          survey_id: survey.id,
-          question_id: el.id,
-        }
-      })
+      if (req.body.type === '1') {
+        console.log('caiu no if')
+        teachers = await User.findAll({ attributes: ['name', 'id'], where: { type: 'professor' } });
 
-      Surveyquestion.bulkCreate(questions);
+        teachers.map((el, index) => {
+          teachersSurveys[index] = {
+            name: `${req.body.name} - professor ${el.name}`,
+            type: req.body.type,
+            teacher_id: el.id,
+          };
+        })
+
+        survey = await Survey.bulkCreate(teachersSurveys)
+
+        survey.map(el => {
+          req.body.questions.map(question => {
+            questions.push({
+              survey_id: el.dataValues.id,
+              question_id: question.id
+            })
+          })
+        })
+
+        console.log('depois do map')
+
+        Surveyquestion.bulkCreate(questions)
+      } else {
+        survey = await Survey.create({ ...surveyBody })
+
+        req.body.questions.map((el, index) => {
+          questions[index] = {
+            survey_id: survey.id,
+            question_id: el.id,
+          }
+        })
+
+        Surveyquestion.bulkCreate(questions);
+      }
 
       return res.json(
         {
-          name: survey.name,
-          type: survey.type,
+          success: true,
         }
       );
 

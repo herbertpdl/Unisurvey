@@ -63,7 +63,7 @@
               <p class="margin-bottom-1"><strong>Respostas:</strong></p>
               <div v-if="selectedQuestion && showChart">
                 <p v-for="(answer, index) in answerCounter" v-bind:key="index">
-                  <strong>{{ answer.description }}</strong>: {{ answer.count }} - {{ percentage(answer.count, answerCounter.length) }}
+                  <strong>{{ answer.description }}</strong>: {{ answer.count }} - {{ percentage(answer.count, totalAnswers) }}%
                 </p>
               </div>
               <!-- Chart data -->
@@ -141,10 +141,8 @@ export default {
       showDiscursive: false,
       showChart: false,
       perPage: 10,
+      totalAnswers: 0,
     }
-  },
-  mounted() {
-    console.log(this.$store)
   },
   methods: {
     percentage(val, total) {
@@ -187,8 +185,9 @@ export default {
                 count: counter,
               })
             })
-            this.answerCounter = alternatives;
 
+            this.answerCounter = alternatives
+            this.totalAnswers = this.answerCounter.reduce((a, b) => a + b.count, 0)
             this.updateChart(alternatives)
             this.showChart = true
             this.showDiscursive = false
@@ -217,6 +216,7 @@ export default {
             })
 
             this.answerCounter = alternativesMultiple
+            this.totalAnswers = this.answerCounter.reduce((a, b) => a + b.count, 0)
             this.updateChart(alternativesMultiple)
             this.showChart = true
             this.showDiscursive = false
@@ -260,8 +260,6 @@ export default {
         labels: [this.selectedQuestion.statement],
         datasets: datasets,
       }
-      
-      console.log(values)
     }
   }
 }

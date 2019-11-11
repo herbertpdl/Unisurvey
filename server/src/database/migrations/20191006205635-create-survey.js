@@ -17,6 +17,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      teacher_id: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        defaultValue: null,
+      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE

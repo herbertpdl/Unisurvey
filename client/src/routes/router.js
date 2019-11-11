@@ -39,7 +39,7 @@ let router = new Router({
     {
       path: '/home',
       name: 'home',
-      componen: Home,
+      component: Home,
       meta: {
         requiresAuth: true,
         authorize: ['admin', 'aluno', 'professor', 'funcionario'],
@@ -163,7 +163,7 @@ let router = new Router({
       }
     },
     {
-      path: '/answer-survey',
+      path: '/answer-survey/:idsurvey',
       name: 'answer-survey',
       component: AnswerSurvey,
       meta: {
@@ -185,11 +185,7 @@ let router = new Router({
 
 router.beforeEach((to, from, next) => {
   const { authorize } = to.meta
-  let currentUserType
-
-  if(store.state.user !== null) {
-    currentUserType = store.state.user.type
-  }
+  let currentUserType = localStorage.getItem('userType')
 
   if(to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.isLoggedIn && authorize.includes(currentUserType)) {

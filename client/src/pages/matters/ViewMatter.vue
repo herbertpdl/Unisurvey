@@ -40,6 +40,13 @@
               </div>
             </div>
             <div class="columns">
+              <div class="column is-2">
+                <b-field label="Código da disciplina">
+                    <b-input :disabled="!edit" v-model="matterData.code" placeholder="Ex: 5751" />
+                </b-field>
+              </div>
+            </div>
+            <div class="columns">
               <div class="column is-6">
                 <b-field label="Professor responsável">
                   <b-input 
@@ -136,6 +143,7 @@ export default {
             this.matterData.id,
             {
               name: this.matterData.name,
+              code: this.matterData.code,
               teacher_id: this.matterData.teacher_id,
               teacher_name: data.name,
             }).then(resp => {

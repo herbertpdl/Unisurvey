@@ -51,6 +51,10 @@ export function updateCourse(id, data) {
   return HTTP_TOKEN.put(`course/${id}`, data). then(resp => resp.data)
 }
 
+export function getTeachersByCourse(id) {
+  return HTTP_TOKEN.get(`course-teachers/${id}`). then(resp => resp.data)
+}
+
 // MATTERS
 export function getMatters() {
   return HTTP_TOKEN.get(`matters`).then(resp => resp.data)
