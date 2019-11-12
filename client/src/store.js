@@ -43,6 +43,7 @@ export default new Vuex.Store({
             localStorage.setItem('userType', resp.user.type)
             localStorage.setItem('userCourse', resp.user.course)
             localStorage.setItem('userName', resp.user.name)
+            localStorage.setItem('userId', resp.user.id)
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
             commit('auth_success', resp)
             resolve(resp)
@@ -60,6 +61,7 @@ export default new Vuex.Store({
         localStorage.removeItem('userType')
         localStorage.removeItem('userCourse')
         localStorage.removeItem('userName')
+        localStorage.removeItem('userId')
         delete axios.defaults.headers.common['Authorization']
         resolve()
       })

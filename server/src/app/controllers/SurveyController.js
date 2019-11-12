@@ -1,6 +1,9 @@
+const Sequelize = require("sequelize");
+
 const { Survey } = require("../models");
 const { Surveyquestion } = require("../models");
 const { Surveyanswers } = require("../models");
+const { Surveyanswered } = require("../models");
 const { User } = require("../models");
 
 class SurveyController {
@@ -73,8 +76,26 @@ class SurveyController {
   }
 
   async getByType(req, res) {
-    const surveys = await Survey.findAll({ where: { type: req.params.type}, include:
-      [{ all: true, nested: true }]});
+    let surveys = undefined
+
+    if (req.params.id_user) {
+      // answered answers from database
+      let temp = await Surveyanswered.findAll({ where: { user_id: req.params.id_user } })
+  
+      //filtered response
+      let answered = []
+      
+      temp.map(el => {
+        answered.push(el.dataValues.survey_id)
+      })
+
+      surveys = await Survey.findAll({ where: { type: req.params.type, id: { [Op.notIn]: answered } }, include:
+        [{ all: true, nested: true }]});
+    } else {
+      surveys = await Survey.findAll({ where: { type: req.params.type }, include:
+        [{ all: true, nested: true }]});
+    }
+
 
     if(surveys) {
       req.surveys = surveys
@@ -108,6 +129,12 @@ class SurveyController {
 
       Surveyanswers.bulkCreate(surveyanswers)
 
+      //Saves that the user already answered the survey
+      Surveyanswered.create({
+        survey_id: req.body.survey_id,
+        user_id: req.body.user_id,
+      })
+
       return res.json(
         {
           id: req.body.survey_id
@@ -123,7 +150,7 @@ class SurveyController {
   async getAnswerBySurveyQuestion(req, res) {
     const answers = await Surveyanswers.findAll({
       attributes: ['answer'],
-      where: { survey_id: req.params.idsurvey, question_id: req.params.idquestion }
+      where: { survey_id: req.params.idsurvey, question_id: req.params.idquestion,  }
     })
     
     if (answers) {
@@ -131,6 +158,34 @@ class SurveyController {
     }
 
     return res.status(400).json({ error: "No answers finded" });
+  }
+
+  
+  async getSurveysByCourse(req, res) {
+    const Op = Sequelize.Op
+
+    const course = req.course;
+
+    const teachers = []
+    
+    course.Matter.map(el => {
+      teachers.push(el.dataValues.teacher_id)
+    })
+
+    // answered answers from database
+    let temp = await Surveyanswered.findAll({ where: { user_id: req.params.id_user } })
+
+    //filtered response
+    let answered = []
+    
+    temp.map(el => {
+      answered.push(el.dataValues.survey_id)
+    })
+
+    const surveyList = await Survey.findAll({ where: { teacher_id: { [Op.in]: teachers }, id: { [Op.notIn]: answered } }, include:
+    [{ all: true, nested: true }]})
+
+    return res.json(surveyList)
   }
 
 }

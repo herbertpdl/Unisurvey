@@ -132,12 +132,6 @@ routes.delete(
   CourseController.delete
 );
 
-routes.get(
-  "/course-teachers/:id",
-  AuthMiddleware,
-  CourseMiddleware,
-  CourseController.getSurveysByCourse
-);
 
 //surveys
 
@@ -150,10 +144,17 @@ routes.get(
   SurveyController.index
 );
 
-routes.get("/surveys/:type", AuthMiddleware, SurveyController.getByType);
+routes.get("/surveys/:type/:id_user?", AuthMiddleware, SurveyController.getByType);
 
 routes.post("/survey-answer", AuthMiddleware, SurveyController.saveAnswers);
 
 routes.get("/survey-answer/:idsurvey/:idquestion", AuthMiddleware, SurveyController.getAnswerBySurveyQuestion);
+
+routes.get(
+  "/course-surveys/:id/:id_user",
+  AuthMiddleware,
+  CourseMiddleware,
+  SurveyController.getSurveysByCourse
+);
 
 module.exports = routes;

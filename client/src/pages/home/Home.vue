@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { getTeachersByCourse, getSurveysByType } from '@/services/api'
+import { getSurveysByCourse, getSurveysByType } from '@/services/api'
 import Card from  '@/components/Card'
 
 export default {
@@ -49,6 +49,9 @@ export default {
     },
     userName() {
       return localStorage.getItem('userName')
+    },
+    userId() {
+      return localStorage.getItem('userId')
     }
   },
   methods: {
@@ -58,7 +61,7 @@ export default {
 
       if (userType === 'aluno') { 
         userCourse = localStorage.getItem('userCourse')
-        Promise.all([getTeachersByCourse(userCourse),getSurveysByType(2)])
+        Promise.all([getSurveysByCourse(userCourse, this.userId),getSurveysByTypeUser(2, this.userId)])
           .then(([courses, type]) => {
             this.surveys = courses.concat(type)
           })

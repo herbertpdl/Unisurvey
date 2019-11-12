@@ -1,7 +1,5 @@
 const { Course } = require("../models");
 const { Coursematter } = require("../models");
-const { Survey } = require("../models");
-const Sequelize = require("sequelize");
 
 class CourseController {
   async index(req, res) {
@@ -89,23 +87,6 @@ class CourseController {
       })
       
     return res.json({ msg: "Success course deleted" });
-  }
-
-  async getSurveysByCourse(req, res) {
-    const Op = Sequelize.Op
-
-    const course = req.course;
-
-    const teachers = []
-    
-    course.Matter.map(el => {
-      teachers.push(el.dataValues.teacher_id)
-    })
-
-    const surveyList = await Survey.findAll({ where: { teacher_id: { [Op.in]: teachers } }, include:
-    [{ all: true, nested: true }]})
-
-    return res.json(surveyList)
   }
 }
 

@@ -94,6 +94,7 @@ export default {
       answeredQuestions: [],
       tempAnswers: [],
       answersQuestions: [],
+      userId: null,
     }
   },
   watch: {
@@ -110,6 +111,7 @@ export default {
         this.surveyData = resp
         this.$store.commit('loading', false)
       })
+    this.userId = localStorage.getItem('userId')
   },
   methods: {
     addMultiple(index) {
@@ -128,6 +130,7 @@ export default {
     save() {
       this.$store.commit('loading', true)
       saveSurveyAnswers({
+        user_id: this.userId,
         survey_id: this.surveyData.id,
         answers: this.answersQuestions
       })

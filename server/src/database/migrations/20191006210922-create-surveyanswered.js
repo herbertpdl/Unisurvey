@@ -2,15 +2,8 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Quizanswered', {
-      idquiz: {
-        id: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-          unique: true,
-          type: Sequelize.INTEGER
-        },
+    return queryInterface.createTable('Surveyanswered', {
+      survey_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -20,7 +13,7 @@ module.exports = {
         },
         allowNull: false
       },
-      iduser: {
+      user_id: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -42,6 +35,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Quizanswered');
+    return queryInterface.dropTable('Surveyanswered');
   }
 };

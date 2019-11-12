@@ -51,10 +51,6 @@ export function updateCourse(id, data) {
   return HTTP_TOKEN.put(`course/${id}`, data). then(resp => resp.data)
 }
 
-export function getTeachersByCourse(id) {
-  return HTTP_TOKEN.get(`course-teachers/${id}`). then(resp => resp.data)
-}
-
 // MATTERS
 export function getMatters() {
   return HTTP_TOKEN.get(`matters`).then(resp => resp.data)
@@ -115,10 +111,18 @@ export function getSurveysByType(type) {
   return HTTP_TOKEN.get(`surveys/${type}`).then(resp => resp.data)
 }
 
+export function getSurveysByTypeUser(type, idUser) {
+  return HTTP_TOKEN.get(`surveys/${type}/${idUser}`).then(resp => resp.data)
+}
+
 export function saveSurveyAnswers(data) {
   return HTTP_TOKEN.post(`survey-answer`, data).then(resp => resp.data)
 }
 
 export function getAnswersBySurveyQuestion(idSurvey, idQuestion) {
   return HTTP_TOKEN.get(`survey-answer/${idSurvey}/${idQuestion}`).then(resp => resp.data)
+}
+
+export function getSurveysByCourse(idCourse, idUser) {
+  return HTTP_TOKEN.get(`course-surveys/${idCourse}/${idUser}`). then(resp => resp.data)
 }
