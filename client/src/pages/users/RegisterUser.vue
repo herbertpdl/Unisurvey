@@ -74,7 +74,7 @@
                   >
                     <option value="aluno">Aluno</option>
                     <option value="professor">Professor</option>
-                    <option value="funcionário">Funcionário</option>
+                    <option value="funcionario">Funcionário</option>
                   </b-select>
                 </b-field>
               </div>

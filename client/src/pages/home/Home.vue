@@ -65,6 +65,11 @@ export default {
           .then(([courses, type]) => {
             this.surveys = courses.concat(type)
           })
+      } else if (userType === 'professor' || userType === 'funcionario') {
+        getSurveysByType(3)
+          .then(resp => {
+            this.surveys = resp;
+          })
       }
     }
   }
