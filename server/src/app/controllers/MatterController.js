@@ -1,4 +1,7 @@
+const Sequelize = require("sequelize");
+
 const { Matter } = require("../models");
+const { Coursematter } = require("../models");
 
 class MatterController {
   async index(req, res) {
@@ -50,7 +53,10 @@ class MatterController {
   }
 
   async delete(req, res) {
+    const Op = Sequelize.Op
     const matter = req.matter;
+
+    Coursematter.destroy({where: {matter_id: matter.id} })
 
     matter.destroy();
 

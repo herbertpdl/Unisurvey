@@ -12,16 +12,10 @@
                 <b-navbar-item tag="router-link" to="/user-list">Listar</b-navbar-item>
               </b-navbar-dropdown>
 
-              <!-- Surveys -->
-              <b-navbar-dropdown v-if="isAdmin" label="Questionários">
-                <b-navbar-item tag="router-link" to="/register-survey">Cadastrar</b-navbar-item>
-                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
-              </b-navbar-dropdown>
-
-              <!-- Questions -->
-              <b-navbar-dropdown v-if="isAdmin" label="Perguntas">
-                <b-navbar-item tag="router-link" to="/register-question">Cadastrar</b-navbar-item>
-                <b-navbar-item tag="router-link" to="/question-list">Listar</b-navbar-item>
+              <!-- Matters -->
+              <b-navbar-dropdown v-if="isAdmin" label="Disciplinas">
+                <b-navbar-item tag="router-link" to="/register-matter">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="/matters-list">Listar</b-navbar-item>
               </b-navbar-dropdown>
 
               <!-- Courses -->
@@ -30,11 +24,18 @@
                 <b-navbar-item tag="router-link" to="/courses-list">Listar</b-navbar-item>
               </b-navbar-dropdown>
 
-              <!-- Matters -->
-              <b-navbar-dropdown v-if="isAdmin" label="Disciplinas">
-                <b-navbar-item tag="router-link" to="/register-matter">Cadastrar</b-navbar-item>
-                <b-navbar-item tag="router-link" to="/matters-list">Listar</b-navbar-item>
+              <!-- Questions -->
+              <b-navbar-dropdown v-if="isAdmin" label="Perguntas">
+                <b-navbar-item tag="router-link" to="/register-question">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="/question-list">Listar</b-navbar-item>
               </b-navbar-dropdown>
+
+              <!-- Surveys -->
+              <b-navbar-item v-if="isAdmin" tag="router-link" to="/register-survey">Novo Questionário</b-navbar-item>
+              <!-- <b-navbar-dropdown v-if="isAdmin" label="Questionários">
+                <b-navbar-item tag="router-link" to="/register-survey">Cadastrar</b-navbar-item>
+                <b-navbar-item tag="router-link" to="">Listar</b-navbar-item>
+              </b-navbar-dropdown> -->
 
               <!-- Matters -->
               <b-navbar-item v-if="!isAdmin" tag="router-link" to="/profile">Perfil</b-navbar-item>

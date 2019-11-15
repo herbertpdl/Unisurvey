@@ -60,9 +60,9 @@
                 <div class="field">
                     <b-switch 
                       :disabled="!edit"
-                      v-model="questionData.checkMultiple"
+                      v-model="questionData.allow_multiple"
                     >
-                      {{ questionData.checkMultiple ? 'Sim' : 'Não' }}
+                      {{ questionData.allow_multiple ? 'Sim' : 'Não' }}
                     </b-switch>
                 </div>
               </div>
@@ -92,7 +92,7 @@
               <div class="column is-6">
                 <div class="b-table">
                   <table class="table is-striped">
-                    <tr v-for="(alternative, index) in alternatives" :key="index">
+                    <tr v-for="(alternative, index) in questionData.alternatives" :key="index">
                       <td width="100%">
                         <p>{{ index+1 }}) {{ alternative.description }}</p>
                       </td>
@@ -149,7 +149,6 @@ export default {
       isSuccessActive: false,
       isErrorActive: false,
       description: null,
-      alternatives: null,
     }
   },
   mounted() {
@@ -157,6 +156,7 @@ export default {
 
     getQuestion(this.$route.params.id)
       .then(resp => {
+        console.log(resp)
         this.questionData = resp
         this.$store.commit('loading', false)
       })
@@ -170,8 +170,8 @@ export default {
       this.edit = true
     },
     addAlternative() {
-      if (this.description !== null && this.alternatives.length < 5) {
-        this.alternatives.push({description: this.description})
+      if (this.description !== null && this.questionData.alternatives.length < 5) {
+        this.questionData.alternatives.push({description: this.description})
         this.description = null
         this.$refs.alternative.focus()
       } else if (this.description === null) {
@@ -181,7 +181,7 @@ export default {
       }
     },
     deleteAlternative(index) {
-      this.alternatives.splice(index, 1)
+      this.questionData.alternatives.splice(index, 1)
     },
     save() {
       this.$store.commit('loading', true)
@@ -190,8 +190,8 @@ export default {
         {
           statement: this.questionData.statement,
           type: this.questionData.type,
-          checkMultiple: this.questionData.checkMultiple,
-          alternatives: this.alternatives,
+          allow_multiple: this.questionData.allow_multiple,
+          alternatives: this.questionData.alternatives,
         }
       )
         .then(resp => {

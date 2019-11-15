@@ -58,20 +58,38 @@ class QuestionController {
 
   async update(req, res) {
     const question = req.question;
+    let alternatives;
+    let tempQuestionAlternatives = [];
+    let tempAlternatives = req.body.alternatives.map(el => {
+      return { description: el.description }
+    })
 
     const questionBody = {
       statement: req.body.statement,
       type: req.body.type,
-      checkMultiple: req.body.checkMultiple
+      allow_multiple: req.body.allow_multiple
     };
 
     await Questionalternative.destroy({ where: { question_id: question.id } })
 
     if(questionBody.type === 'multiple') {
-      req.body.alternatives.map(el => {
-        Object.assign(el, {question_id: question.id})
+      console.log('bem antes')
+
+      console.log(req.body.alternatives)
+
+      alternatives = await Alternative.bulkCreate(tempAlternatives);
+
+      console.log('antes')
+
+      alternatives.map(el => {
+        tempQuestionAlternatives.push({question_id: question.id, alternative_id: el.id})
       })
-      await Questionalternative.bulkCreate(req.body.alternatives );
+
+      console.log('depois')
+
+      await Questionalternative.bulkCreate(tempQuestionAlternatives);
+
+      console.log('mais depois ainda')
     }
 
     question.update(questionBody);
