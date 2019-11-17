@@ -3,6 +3,32 @@
     <div class="container">
       <div class="columns">
         <div class="column is-12">
+          <!-- Success Message -->
+          <b-message
+            auto-close
+            has-icon
+            title="Sucesso"
+            type="is-success"
+            :active.sync="isSuccessActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Questionário cadastrado com sucesso!
+          </b-message>
+
+          <!-- Error Message -->
+          <b-message
+            auto-close
+            has-icon
+            title="Sucesso"
+            type="is-danger"
+            :active.sync="isErrorActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Houve um erro ao tentar cadastrar o questionário, verifique os dados digitados e tente novamente.
+          </b-message>
+
           <h1 class="title">Cadastro de Questionário</h1>
           <card>
             <div class="columns">
@@ -84,6 +110,8 @@ export default {
       selectedQuestions: [],
       questionsList: [],
       infoActive: false,
+      isSuccessActive: false,
+      isErrorActive: false,
     }
   },
   watch: {
@@ -108,10 +136,12 @@ export default {
         questions: this.selectedQuestions,
       }).then(resp => {
         this.$store.commit('loading', false)
+        this.isSuccessActive = true
       })
       .catch(err => {
         console.log(err)
         this.$store.commit('loading', false)
+        this.isErrorActive = true
       })
     }
   },

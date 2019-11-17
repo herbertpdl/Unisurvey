@@ -30,6 +30,10 @@
                       {{ props.row.name }}
                   </b-table-column>
 
+                  <b-table-column label="Código da Disciplina">
+                      {{ props.row.code }}
+                  </b-table-column>
+
                   <b-table-column label="Professor Responsável">
                       {{ props.row.teacher_name }}
                   </b-table-column>
