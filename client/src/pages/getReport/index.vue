@@ -39,7 +39,7 @@
               </div>
             </card>
             
-            <card key="answer-chart" v-else>
+            <card key="answer-chart" ref="content" v-else>
               <div class="columns">
                 <div class="column is-6">
                   <b-field label="Selecione a pergunta desejada">
@@ -57,6 +57,9 @@
                       </option>
                     </b-select>
                   </b-field>
+                </div>
+                <div class="column is-2">
+                  <button @click="downloadWithCSS">Download PDF</button>
                 </div>
               </div>
 
@@ -101,6 +104,8 @@
 
 <script>
 import { getSurveysByType ,getAnswersBySurveyQuestion } from '@/services/api'
+import jsPDF from 'jspdf' 
+import html2canvas from "html2canvas"
 
 import Card from  '@/components/Card'
 import BarChart from '@/components/ChartBar.js'
@@ -145,8 +150,8 @@ export default {
     }
   },
   methods: {
-    percentage(val, total) {
-      return ((val * 100) / total)
+    percentage(val, total) { 
+      return ((val * 100) / total).toFixed(2)
     },
     getSurveys(e) {
       this.$store.commit('loading', true)
@@ -260,7 +265,28 @@ export default {
         labels: [this.selectedQuestion.statement],
         datasets: datasets,
       }
-    }
+    },
+    download() {
+      console.log('teste')
+      const doc = new jsPDF();
+      const contentHtml = this.$refs.content.innerHTML;
+      doc.fromHTML(contentHtml, 15, 15, {
+        width: 170
+      });
+      doc.save("sample.pdf");
+    },
+
+    downloadWithCSS() {
+      const doc = new jsPDF();
+      /** WITH CSS */
+      var canvasElement = document.createElement('canvas');
+        html2canvas(this.$refs.content, { canvas: canvasElement 
+          }).then(function (canvas) {
+        const img = canvas.toDataURL("image/jpeg", 0.8);
+        doc.addImage(img,'JPEG',20,20);
+        doc.save("sample.pdf");
+      });
+    },
   }
 }
 </script>
