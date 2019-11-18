@@ -3,7 +3,7 @@ import { HTTP, HTTP_TOKEN } from './http';
 
 // LOGIN
 export function login(data) {
-  return axios.post('http://localhost:3002/api/v1/auth', data).then(resp => resp.data)
+  return HTTP.post('http://localhost:3002/api/v1/auth', data).then(resp => resp.data)
 }
 
 export function getUsers() {

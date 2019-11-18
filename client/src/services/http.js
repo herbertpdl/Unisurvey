@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const HTTP_TOKEN = axios.create({
-  baseURL: 'http://localhost:3002/api/v1/',
+  baseURL: 'api/v1/',
   headers: {
     Authorization: 'Bearer {token}',
     'Content-Type': 'application/json;charset=UTF-8'
@@ -9,7 +9,7 @@ export const HTTP_TOKEN = axios.create({
 })
 
 export const HTTP = axios.create({
-  baseURL: process.env.API_ENDPOINT,
+  baseURL: 'api/v1',
   headers: {
     'Content-Type': 'application/json;charset=UTF-8'
   }
