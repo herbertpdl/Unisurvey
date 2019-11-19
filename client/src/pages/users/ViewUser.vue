@@ -72,25 +72,34 @@
             <div v-if="userdata.type === 'aluno'" class="columns">
               <div class="column is-6">
                 <b-field label="Curso">
-                  <b-input 
-                    v-if="!edit" 
-                    disabled 
-                    v-model="userdata.course" 
-                  />
+                  <b-select 
+                    v-if="!edit"
+                    v-model="userdata.course"
+                    disabled
+                    expanded
+                  >
+                    <option
+                      v-for="(course, index) in courses"
+                      v-bind:key="index"
+                      v-bind:value="course.id"
+                    >
+                      {{ course.name }}
+                    </option>
+                  </b-select>
                   <b-select 
                     v-else
                     v-model="userdata.course" 
                     placeholder="Selecione" 
                     expanded
                   >
-                      <option
-                        v-for="(course, index) in courses"
-                        v-bind:key="index"
-                        v-bind:value="course.id"
-                      >
-                        {{ course.name }}
-                      </option>
-                    </b-select>
+                    <option
+                      v-for="(course, index) in courses"
+                      v-bind:key="index"
+                      v-bind:value="course.id"
+                    >
+                      {{ course.name }}
+                    </option>
+                  </b-select>
                 </b-field>
               </div>
             </div>
@@ -146,6 +155,11 @@ export default {
         this.$store.commit('loading', false)  
       })
 
+    getCourses()
+      .then(resp => {
+        this.courses = resp
+      })
+
     if (this.$route.params.viewtype === 'edit') {
       this.enableEdit()
     }
@@ -153,12 +167,8 @@ export default {
   methods: {
     enableEdit() {
       this.$store.commit('loading', true)
-      getCourses()
-        .then(resp => {
-          this.courses = resp
-          this.edit = true
-          this.$store.commit('loading', false)
-        })
+      this.edit = true
+      this.$store.commit('loading', false)
     },
     save() {
       this.$store.commit('loading', true)

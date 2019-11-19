@@ -114,9 +114,10 @@ export default {
 
       if (userType === 'aluno') { 
         userCourse = localStorage.getItem('userCourse')
-        Promise.all([getSurveysByCourse(userCourse, this.userId),getSurveysByTypeUser(2, this.userId)])
+        Promise.all([getSurveysByCourse(userCourse, this.userId),getSurveysByType(2, this.userId)])
           .then(([courses, type]) => {
             this.surveys = courses.concat(type)
+            console.log(this.surveys)
           })
       } else if (userType === 'professor' || userType === 'funcionario') {
         getSurveysByType(3)

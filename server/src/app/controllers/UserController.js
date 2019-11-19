@@ -1,3 +1,5 @@
+const Sequelize = require("sequelize");
+
 const { User } = require("../models");
 
 class UserController {
@@ -8,9 +10,16 @@ class UserController {
   }
 
   async getAll(req, res) {
+    const Op = Sequelize.Op
     var result = [];
     
-      result = await User.findAll();
+      result = await User.findAll({
+        where: {
+          type: {
+            [Op.ne]: 'admin'
+          }
+        }
+      });
 
     return res.json(result);
   }
