@@ -1,9 +1,9 @@
 module.exports = {
   dialect: "mysql",
-  host: "us-cdbr-iron-east-05.cleardb.net",
-  username: "b74e23ae863454",
-  password: "ee439a33",
-  database: "heroku_d28e4c39532502d",
+  host: "unisurvey.ch652aooe2vr.us-east-2.rds.amazonaws.com",
+  username: "admin",
+  password: "unidbsurvey",
+  database: "unisurvey",
   operatorAliases: false,
   define: {
     timestamps: true,
