@@ -5,6 +5,7 @@ import store from './store'
 import './plugins/buefy'
 import './plugins/multiselect'
 import './plugins/vue-the-mask'
+import './plugins/vee-validate'
 
 import '@mdi/font/css/materialdesignicons.min.css';
 

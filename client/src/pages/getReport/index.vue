@@ -39,62 +39,73 @@
               </div>
             </card>
             
-            <card key="answer-chart" ref="content" v-else>
-              <div class="columns">
-                <div class="column is-6">
-                  <b-field label="Selecione a pergunta desejada">
-                    <b-select
-                      expanded
-                      placeholder="selecione"
-                      @change.native="setSelectedQuestion"
-                    >
-                      <option
-                        v-for="(question, indexQuestion) in selectedSurvey.questions"
-                        :key="indexQuestion"
-                        :value="indexQuestion"
+            <div key="answer-chart" v-else  ref="content">
+              <card>
+                <div class="columns">
+                  <div class="column is-6">
+                    <b-field label="Selecione a pergunta desejada">
+                      <b-select
+                        expanded
+                        placeholder="selecione"
+                        @change.native="setSelectedQuestion"
                       >
-                        {{ question.statement }}
-                      </option>
-                    </b-select>
-                  </b-field>
+                        <option value="allQuestions">Mostrar todas</option>
+                        <option
+                          v-for="(question, indexQuestion) in selectedSurvey.questions"
+                          :key="indexQuestion"
+                          :value="indexQuestion"
+                        >
+                          {{ question.statement }}
+                        </option>
+                      </b-select>
+                    </b-field>
+                  </div>
                 </div>
-                <div class="column is-2">
-                  <button @click="downloadWithCSS">Download PDF</button>
+
+                <p class="margin-bottom-1"><strong>Respostas:</strong></p>
+                <div v-if="selectedQuestion && showChart">
+                  <p v-for="(answer, index) in answerCounter" v-bind:key="index">
+                    <strong>{{ answer.description }}</strong>: {{ answer.count }} - {{ percentage(answer.count, totalAnswers) }}%
+                  </p>
                 </div>
-              </div>
+                <!-- Chart data -->
+                <bar-chart v-if="chartdata !== null && showChart && !showAllChart" :chart-data="chartdata" :options="options"/>
 
-              <p class="margin-bottom-1"><strong>Respostas:</strong></p>
-              <div v-if="selectedQuestion && showChart">
-                <p v-for="(answer, index) in answerCounter" v-bind:key="index">
-                  <strong>{{ answer.description }}</strong>: {{ answer.count }} - {{ percentage(answer.count, totalAnswers) }}%
-                </p>
-              </div>
-              <!-- Chart data -->
-              <bar-chart v-if="chartdata !== null && showChart" :chart-data="chartdata" :options="options"/>
+                <!-- Discursive answers -->
+                <div v-if="discursiveAnswers.length !== 0 && showDiscursive">
+                  <b-select v-model="perPage">
+                      <option value="10">10 por página</option>
+                      <option value="15">15 por página</option>
+                      <option value="25">25 por página</option>
+                      <option value="50">50 por página</option>
+                  </b-select>
+                  <b-table
+                    :data="discursiveAnswers"
+                    :per-page="perPage"
+                    paginated
+                    striped
+                    hoverable
+                  >
+                    <template slot-scope="props">
+                      <b-table-column>
+                        {{ props.row.answer }}
+                      </b-table-column>
+                    </template>
+                  </b-table>
+                </div>
 
-              <!-- Discursive answers -->
-              <div v-if="discursiveAnswers.length !== 0 && showDiscursive">
-                <b-select v-model="perPage">
-                    <option value="10">10 por página</option>
-                    <option value="15">15 por página</option>
-                    <option value="25">25 por página</option>
-                    <option value="50">50 por página</option>
-                </b-select>
-                <b-table
-                  :data="discursiveAnswers"
-                  :per-page="perPage"
-                  paginated
-                  striped
-                  hoverable
-                >
-                  <template slot-scope="props">
-                    <b-table-column>
-                      {{ props.row.answer }}
-                    </b-table-column>
-                  </template>
-                </b-table>
-              </div>
-            </card>
+                <!-- Render chart off al questions -->
+                <div v-if="chartDataAll.length > 0 && !showChart && showAllChart">
+                  <div v-for="(data, index) in chartDataAll" :key="index" class="margin-bottom-2">
+                    <label class="label">{{ selectedSurvey.questions[index].statement }}</label>
+                    <bar-chart
+                      :key="index"
+                      :chart-data="data" :options="options"
+                    />
+                  </div>
+                </div>
+              </card>
+            </div>
           </transition>
         </div>
       </div>
@@ -130,6 +141,7 @@ export default {
         'rgba(153, 102, 255, 0.5)',
       ],
       chartdata: null,
+      chartDataAll: [],
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -143,8 +155,10 @@ export default {
       },
       answerCounter: null,
       discursiveAnswers: [],
+      allDiscursiveAnswers: [],
       showDiscursive: false,
       showChart: false,
+      showAllChart: false,
       perPage: 10,
       totalAnswers: 0,
     }
@@ -169,21 +183,33 @@ export default {
       this.selectedSurvey = this.surveyList[event.target.value]
     },
     setSelectedQuestion(event) {
-      this.selectedQuestion = this.selectedSurvey.questions[event.target.value]
-
-      this.getAnswers()
+      if (event.target.value === 'allQuestions') {
+        this.getAllAnswers()
+      } else {
+        this.selectedQuestion = this.selectedSurvey.questions[event.target.value]
+        this.getAnswers(this.selectedSurvey, this.selectedQuestion, 'single')
+      }
     },
-    getAnswers() {
+    getAllAnswers() {
+      this.chartDataAll = []
+
+      this.selectedSurvey.questions.map(el => {
+        this.getAnswers(this.selectedSurvey, el, 'all')
+      })
+
+      this.showChart = false
+      this.showAllChart = true
+    },
+    getAnswers(survey, question, type) {
       this.$store.commit('loading', true)
-      getAnswersBySurveyQuestion(this.selectedSurvey.id, this.selectedQuestion.id)
+      getAnswersBySurveyQuestion(survey.id, question.id)
         .then(resp => {
           this.$store.commit('loading', false)
-          // count how many times the value appers
           let alternatives = []
 
           // get occurrence in multiple choice(single answer) question
-          if (this.selectedQuestion.type === 'multiple' && !this.selectedQuestion.allow_multiple) {
-            this.selectedQuestion.alternatives.map(el => {
+          if (question.type === 'multiple' && !question.allow_multiple) {
+            question.alternatives.map(el => {
               let counter = this.getOccurrence(resp, el.description)
               alternatives.push({
                 description: el.description,
@@ -193,15 +219,20 @@ export default {
 
             this.answerCounter = alternatives
             this.totalAnswers = this.answerCounter.reduce((a, b) => a + b.count, 0)
-            this.updateChart(alternatives)
-            this.showChart = true
-            this.showDiscursive = false
-          } else if (this.selectedQuestion.type === 'multiple' && this.selectedQuestion.allow_multiple) {
-            // get occurrence in multiple choice(multiple answer) question
 
+            this.updateChart(alternatives, type, question)
+            // 
+            if (type === 'single') {
+              this.showChart = true
+              this.showAllChart = false
+              this.showDiscursive = false
+            } 
+          } else if (question.type === 'multiple' && question.allow_multiple) {
+
+            // get occurrence in multiple choice(multiple answer) question
             let alternativesMultiple = {}
             resp.map(el => {
-              this.selectedQuestion.alternatives.map(alternative => {
+              question.alternatives.map(alternative => {
                 if (alternativesMultiple[alternative.description] == undefined) {
                   alternativesMultiple[alternative.description] = 0
                 }
@@ -222,15 +253,22 @@ export default {
 
             this.answerCounter = alternativesMultiple
             this.totalAnswers = this.answerCounter.reduce((a, b) => a + b.count, 0)
-            this.updateChart(alternativesMultiple)
-            this.showChart = true
-            this.showDiscursive = false
+            this.updateChart(alternativesMultiple, type, question)
+
+            if (type === 'single') {
+              this.showChart = true
+              this.showDiscursive = false
+            }
           } else {
             // discursive question answers
 
-            this.discursiveAnswers = resp
-            this.showChart = false
-            this.showDiscursive = true
+            if(type === 'single') {
+              this.discursiveAnswers = resp
+              this.showChart = false
+              this.showDiscursive = true
+            } else {
+              this.allDiscursiveAnswers.push(resp)
+            }
           }
           
         })
@@ -250,8 +288,9 @@ export default {
 
       return total
     },
-    updateChart(values) {
+    updateChart(values, type, question) {
       let datasets = []
+      console.log(type)
 
       values.map((el, index) => {
         datasets.push({
@@ -261,31 +300,18 @@ export default {
         })
       })
 
-      this.chartdata = {
-        labels: [this.selectedQuestion.statement],
-        datasets: datasets,
+      if (type === 'single') {
+        this.chartdata = {
+          labels: [this.selectedQuestion.statement],
+          datasets: datasets,
+        }
+      } else {
+        this.chartDataAll.push({
+          labels: [question.statement],
+          datasets: datasets
+        })
       }
-    },
-    download() {
-      console.log('teste')
-      const doc = new jsPDF();
-      const contentHtml = this.$refs.content.innerHTML;
-      doc.fromHTML(contentHtml, 15, 15, {
-        width: 170
-      });
-      doc.save("sample.pdf");
-    },
-
-    downloadWithCSS() {
-      const doc = new jsPDF();
-      /** WITH CSS */
-      var canvasElement = document.createElement('canvas');
-        html2canvas(this.$refs.content, { canvas: canvasElement 
-          }).then(function (canvas) {
-        const img = canvas.toDataURL("image/jpeg", 0.8);
-        doc.addImage(img,'JPEG',20,20);
-        doc.save("sample.pdf");
-      });
+      
     },
   }
 }
