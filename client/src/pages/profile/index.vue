@@ -13,7 +13,7 @@
             :duration="5000"
             aria-close-label="Fechar mensagem"
           >
-            Usuário alterado com sucesso!
+            Dados alterados com sucesso!
           </b-message>
 
           <!-- Error Message -->
@@ -26,7 +26,7 @@
             :duration="5000"
             aria-close-label="Fechar mensagem"
           >
-            Houve um erro ao tentar salvar os dados do usuário, verifique os dados digitados e tente novamente.
+            Houve um erro ao tentar salvar os dados, verifique os dados digitados e tente novamente.
           </b-message>
         <h1 class="title">{{ userName }}</h1>
           <card>
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import { getUser, getCourses, updateUser } from '@/services/api'
+import { getUser, updateUser } from '@/services/api'
 
 import Card from  '@/components/Card'
 
@@ -86,8 +86,7 @@ export default {
     return {
       userName: null,
       userdata: null,
-      edit: false,
-      courses: null,
+      edit: false,      
       isSuccessActive: false,
       isErrorActive: false,
     }
@@ -100,11 +99,6 @@ export default {
         this.userName = resp.name
         this.userdata = resp
         this.$store.commit('loading', false)  
-      })
-
-    getCourses()
-      .then(resp => {
-        this.courses = resp
       })
 
     if (this.$route.params.viewtype === 'edit') {

@@ -27,7 +27,7 @@ import AnswerSurvey from '../pages/surveys/AnswerSurvey'
 //  Report
 import GetReport from '../pages/getReport'
 //  Profile
-import Profile from '../pages/profile/profile'
+import Profile from '../pages/profile'
 
 Vue.use(Router)
 
@@ -53,7 +53,7 @@ let router = new Router({
       component: Profile,
       meta: {
         requiresAuth: true,
-        authorize: ['admin', 'aluno', 'professor', 'funcionario'],
+        authorize: ['aluno', 'professor', 'funcionario'],
       }
     },
     {
