@@ -33,7 +33,7 @@
                 </div>
               </div>
               <div v-if="selectedSurvey !== null" class="align-buttons--right">
-                <b-button type="is-primary" v-on:click="proceed = true">
+                <b-button type="is-primary" @click="proceed = true">
                   Prosseguir
                 </b-button>
               </div>
@@ -60,8 +60,12 @@
                       </b-select>
                     </b-field>
                   </div>
+                  <div class="column is-2">
+                    <b-button type="is-primary" icon-right="printer" @click="print">Imprimir</b-button>
+                  </div>
                 </div>
 
+                <p class="show-print title" v-if="selectedSurvey"><strong>{{ selectedSurvey.name }}</strong></p>
                 <p class="margin-bottom-1"><strong>Respostas:</strong></p>
                 <div v-if="selectedQuestion && showChart">
                   <p v-for="(answer, index) in answerCounter" v-bind:key="index">
@@ -313,10 +317,28 @@ export default {
       }
       
     },
+    print() {
+      window.print();
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .show-print {
+    display: none;
+  }
 
+  @media print {
+    .title, button,
+    .field {
+      display: none;
+    }
+    .card--container {
+      border: 0;
+    }
+    .show-print {
+      display: block!important;
+    }
+  }
 </style>
