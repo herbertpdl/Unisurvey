@@ -73,7 +73,17 @@
                   </p>
                 </div>
                 <!-- Chart data -->
-                <bar-chart v-if="chartdata !== null && showChart && !showAllChart" :chart-data="chartdata" :options="options"/>
+                <bar-chart
+                  v-if="chartdata !== null && showChart && !showAllChart && !chartdata.allow_multiple"
+                  :chart-data="chartdata.data"
+                  :options="options"
+                />
+
+                <doughnut-chart
+                  v-else-if="chartdata !== null && showChart"
+                  :chart-data="chartdata.data"
+                  :options="options"
+                />
 
                 <!-- Discursive answers -->
                 <div v-if="discursiveAnswers.length !== 0 && showDiscursive">
@@ -103,9 +113,18 @@
                   <div v-for="(data, index) in chartDataAll" :key="index" class="margin-bottom-2">
                     <label class="label">{{ selectedSurvey.questions[index].statement }}</label>
                     <bar-chart
+                      v-if="!data.allow_multiple"
                       :key="index"
-                      :chart-data="data" :options="options"
+                      :chart-data="data.data" :options="options"
                     />
+
+                    <doughnut-chart
+                      v-else
+                      :key="index"
+                      :chart-data="data.data"
+                      :options="options"
+                    />
+
                   </div>
                 </div>
               </card>
@@ -124,12 +143,14 @@ import html2canvas from "html2canvas"
 
 import Card from  '@/components/Card'
 import BarChart from '@/components/ChartBar.js'
+import DoughnutChart from '@/components/ChartPie.js'
 
 export default {
   name: 'get-report',
   components: {
     Card,
     BarChart,
+    DoughnutChart
   },
   data() {
     return {
@@ -294,7 +315,10 @@ export default {
     },
     updateChart(values, type, question) {
       let datasets = []
-      console.log(type)
+      let singleDataset = []
+      let chartLabels = null
+      let multipleData = null
+      let multipleColors = []
 
       values.map((el, index) => {
         datasets.push({
@@ -304,17 +328,47 @@ export default {
         })
       })
 
+      console.log(values)
+
+      //set labels if chart is multiplechoice
+      if (question.allow_multiple) {
+        chartLabels = values.map(el => {
+          return el.description
+        })
+
+        multipleData = values.map((el, index) => {
+          multipleColors.push(this.chartColors[index])
+          return el.count
+        })
+      }
+
+      console.log(multipleData)
+
       if (type === 'single') {
         this.chartdata = {
-          labels: [this.selectedQuestion.statement],
-          datasets: datasets,
+          allow_multiple: this.selectedQuestion.allow_multiple,
+          data: {
+            labels: chartLabels || [this.selectedQuestion.statement],
+            datasets: question.allow_multiple ? [{
+              data: multipleData,
+              backgroundColor: multipleColors,
+            }] : datasets,
+          }
         }
       } else {
         this.chartDataAll.push({
-          labels: [question.statement],
-          datasets: datasets
+          allow_multiple: question.allow_multiple,
+          data: {
+            labels: chartLabels || [question.statement],
+            datasets: question.allow_multiple ? [{
+              data: multipleData,
+              backgroundColor: multipleColors,
+            }] : datasets,
+          }
         })
       }
+
+      console.log(this.chartdata)
       
     },
     print() {

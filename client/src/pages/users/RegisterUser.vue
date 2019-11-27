@@ -35,10 +35,7 @@
             <div class="columns">
               <div class="column is-6">
                 <b-field label="Nome">
-                  <ValidationProvider name="nome" rules="required|min:3" v-slot="{ errors }">
-                    <b-input v-model="name" placeholder="Ex: João da Silva" />
-                    <span id="error">{{ errors[0] }}</span>
-                  </ValidationProvider>
+                  <b-input v-model="name" placeholder="Ex: João da Silva" />
                 </b-field>
               </div>
             </div>
