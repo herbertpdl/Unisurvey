@@ -4,19 +4,32 @@
       <div class="columns">
         <div class="column is-12">
 
-          <!--<div class="progress-container margin-bottom-1">
-            <b-progress
-              v-if="surveyData.questions && surveyData.questions.length"
-              :value="totalPercent"
-              size="is-medium"
-              type="is-dar-grey"
-              show-value
-            >
-              Progresso {{ answeredQuestions.length }} / {{ surveyData.questions.length }}
-            </b-progress>
-          </div> -->
-          <h1 class="title">{{ surveyData.name }}</h1>
-          <card>
+          <!-- Success Message -->
+          <b-message
+            has-icon
+            title="Sucesso"
+            type="is-success"
+            :active.sync="isSuccessActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Sua resposta foi registrada, obrigado!.
+          </b-message>
+
+          <!-- Error Message -->
+          <b-message
+            has-icon
+            title="Sucesso"
+            type="is-danger"
+            :active.sync="isErrorActive"
+            :duration="5000"
+            aria-close-label="Fechar mensagem"
+          >
+            Houve um erro ao registrar suas respostas, tente novamente mais tarde.
+          </b-message>
+
+          <h1 v-if="!isSuccessActive && !isErrorActive" class="title">{{ surveyData.name }}</h1>
+          <card v-if="!isSuccessActive && !isErrorActive">
             <div
               v-for="(question, index) in surveyData.questions"
               :key="index"
@@ -24,7 +37,7 @@
             >
               <div class="column is-6">
                 <b-field :label="`${index+1}) ${question.statement}`">
-                  <!-- Discursive question --> 
+                  <!-- Discursive question -->
                   <b-input
                     v-if="question.type === 'discursive'"
                     v-model="answers[index]"
@@ -47,7 +60,7 @@
                   <div v-else>
                     <div
                       v-for="(alternative, indexAlternative) in question.alternatives"
-                      :key="indexAlternative" 
+                      :key="indexAlternative"
                       class="field"
                     >
                       <b-checkbox
@@ -95,6 +108,8 @@ export default {
       tempAnswers: [],
       answersQuestions: [],
       userId: null,
+      isSuccessActive: false,
+      isErrorActive: false,
     }
   },
   watch: {
@@ -136,10 +151,12 @@ export default {
       })
         .then(resp => {
           this.$store.commit('loading', false)
+          this.isSuccessActive = true
         })
         .catch(err => {
           console.log(err)
           this.$store.commit('loading', false)
+          this.isErrorActive = true
         })
     }
   },
