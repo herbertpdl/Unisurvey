@@ -100,9 +100,9 @@
             </transition>
             <div class="align-buttons--right">
               <div class="buttons">
-                <b-button type="is-danger">
+                <!-- <b-button type="is-danger">
                   Cancelar
-                </b-button>
+                </b-button> -->
                 <b-button type="is-primary" @click="save">
                   Enviar
                 </b-button>

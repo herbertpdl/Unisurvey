@@ -4,10 +4,10 @@
       <div class="columns">
         <div class="column is-12">
           <!-- Success Message -->
-          <b-message 
-            auto-close 
+          <b-message
+            auto-close
             has-icon
-            title="Sucesso" 
+            title="Sucesso"
             type="is-success"
             :active.sync="isSuccessActive"
             :duration="5000"
@@ -17,10 +17,10 @@
           </b-message>
 
           <!-- Error Message -->
-          <b-message 
-            auto-close 
+          <b-message
+            auto-close
             has-icon
-            title="Sucesso" 
+            title="Sucesso"
             type="is-danger"
             :active.sync="isErrorActive"
             :duration="5000"
@@ -80,9 +80,9 @@
             </div>
             <div class="align-buttons--right">
               <div class="buttons">
-                <b-button type="is-danger">
+                <!-- <b-button type="is-danger">
                   Cancelar
-                </b-button>
+                </b-button> -->
                 <b-button type="is-primary" @click="save">
                   Enviar
                 </b-button>
@@ -108,7 +108,7 @@ export default {
   data() {
     return {
       name: null,
-      code: null, 
+      code: null,
       teachers: [],
       teacher: null,
       hasTeachers: true,
@@ -147,7 +147,7 @@ export default {
               this.isErrorActive = true
             })
         })
-      
+
     },
   }
 }
