@@ -368,6 +368,8 @@ export default {
         })
       }
 
+      this.showDiscursive = false;
+
       console.log(this.chartdata)
       
     },
